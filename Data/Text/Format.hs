@@ -14,7 +14,8 @@
 module Data.Text.Format
     (
     -- * Types
-      Only(..)
+      Format
+    , Only(..)
     -- ** Types for format control
     , Fast(..)
     , Shown(..)
@@ -32,7 +33,7 @@ module Data.Text.Format
 import qualified Data.Text.Buildable as B
 import Data.Text.Format.Params (Params(..))
 import Data.Text.Format.Functions ((<>))
-import Data.Text.Format.Types (Fast(..), Only(..), Shown(..))
+import Data.Text.Format.Types.Internal (Fast(..), Format(..), Only(..), Shown(..))
 import Data.Text.Lazy.Builder
 import Prelude hiding (print)
 import System.IO (Handle)
@@ -41,8 +42,8 @@ import qualified Data.Text.Lazy as LT
 import qualified Data.Text.Lazy.IO as LT
 
 -- | Render a format string and arguments to a 'Builder'.
-build :: Params ps => ST.Text -> ps -> Builder
-build fmt ps = zipParams (map fromText . ST.splitOn "{}" $ fmt) xs
+build :: Params ps => Format -> ps -> Builder
+build (Format fmt) ps = zipParams (map fromText . ST.splitOn "{}" $ fmt) xs
   where zipParams (f:fs) (y:ys) = f <> y <> zipParams fs ys
         zipParams [f] []        = f
         zipParams _ _ = error . LT.unpack $ format
@@ -51,16 +52,16 @@ build fmt ps = zipParams (map fromText . ST.splitOn "{}" $ fmt) xs
         xs = buildParams ps
 
 -- | Render a format string and arguments to a 'LT.Text'.
-format :: Params ps => ST.Text -> ps -> LT.Text
+format :: Params ps => Format -> ps -> LT.Text
 format fmt ps = toLazyText $ build fmt ps
 
 -- | Render a format string and arguments, then print the result.
-print :: Params ps => ST.Text -> ps -> IO ()
+print :: Params ps => Format -> ps -> IO ()
 print fmt ps = LT.putStr . toLazyText $ build fmt ps
 
 -- | Render a format string and arguments, then print the result to
 -- the given file handle.
-hprint :: Params ps => Handle -> ST.Text -> ps -> IO ()
+hprint :: Params ps => Handle -> Format -> ps -> IO ()
 hprint h fmt ps = LT.hPutStr h . toLazyText $ build fmt ps
 
 -- | Pad the left hand side of a string until it reaches @k@

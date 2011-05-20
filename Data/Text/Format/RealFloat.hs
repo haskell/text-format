@@ -15,7 +15,7 @@ module Data.Text.Format.RealFloat
 import Data.Text.Format.Functions ((<>), i2d)
 import Data.Text.Format.RealFloat.Functions (roundTo)
 import Data.Text.Format.Int (integral)
-import Data.Text.Format.Types (FPFormat(..))
+import Data.Text.Format.Types.Internal (FPFormat(..))
 import qualified Data.Text as T
 import Data.Array.Base (unsafeAt)
 import Data.Text.Lazy.Builder

@@ -37,6 +37,7 @@ library
     Data.Text.Format.RealFloat.Fast
     Data.Text.Format.RealFloat.Fast.Internal
     Data.Text.Format.RealFloat.Functions
+    Data.Text.Format.Types.Internal
 
   build-depends:
     array,
