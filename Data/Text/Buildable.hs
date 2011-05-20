@@ -1,5 +1,16 @@
 {-# LANGUAGE FlexibleInstances #-}
 
+-- |
+-- Module      : Data.Text.Buildable
+-- Copyright   : (c) 2011 MailRank, Inc.
+--
+-- License     : BSD-style
+-- Maintainer  : bos@mailrank.com
+-- Stability   : experimental
+-- Portability : GHC
+--
+-- Types that can be rendered to a 'Builder'.
+
 module Data.Text.Buildable
     (
       Buildable(..)
@@ -21,6 +32,7 @@ import Data.Word (Word, Word8, Word16, Word32, Word64)
 import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
 
+-- | The class of types that can be rendered to a 'Builder'.
 class Buildable p where
     build :: p -> Builder
 

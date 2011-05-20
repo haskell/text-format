@@ -4,6 +4,8 @@
 -- Module:    Data.Text.Format.RealFloat
 -- Copyright: (c) The University of Glasgow 1994-2002
 -- License:   see libraries/base/LICENSE
+--
+-- Serialize a floating point value to a 'Builder'.
 
 module Data.Text.Format.RealFloat
     (

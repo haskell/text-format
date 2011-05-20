@@ -1,13 +1,13 @@
 {-# LANGUAGE BangPatterns, CPP, MagicHash, UnboxedTuples #-}
 
--- Module:      Blaze.Text.Int
+-- Module:      Data.Text.Format.Int
 -- Copyright:   (c) 2011 MailRank, Inc.
 -- License:     BSD3
 -- Maintainer:  Bryan O'Sullivan <bos@mailrank.com>
 -- Stability:   experimental
 -- Portability: portable
 --
--- Efficiently serialize an integral value as a lazy 'L.ByteString'.
+-- Efficiently serialize an integral value to a 'Builder'.
 
 module Data.Text.Format.Int
     (
