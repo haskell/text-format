@@ -1,0 +1,148 @@
+{-# LANGUAGE FlexibleInstances #-}
+
+module Data.Text.Buildable
+    (
+      Buildable(..)
+    ) where
+
+import Data.Int (Int8, Int16, Int32, Int64)
+import Data.Ratio (Ratio, denominator, numerator)
+import Data.Text.Format.Functions ((<>))
+import Data.Text.Format.Int (integral)
+import Data.Text.Format.RealFloat (showFloat)
+import Data.Text.Format.RealFloat.Fast (fshowFloat)
+import Data.Text.Format.Types (Fast(..), Shown(..))
+import Data.Text.Lazy.Builder
+import Data.Time.Calendar (Day, showGregorian)
+import Data.Time.Clock (DiffTime, NominalDiffTime, UTCTime, UniversalTime)
+import Data.Time.Clock (getModJulianDate)
+import Data.Time.LocalTime (LocalTime, TimeOfDay, TimeZone, ZonedTime)
+import Data.Word (Word, Word8, Word16, Word32, Word64)
+import qualified Data.Text as ST
+import qualified Data.Text.Lazy as LT
+
+class Buildable p where
+    build :: p -> Builder
+
+instance Buildable Builder where
+    build = id
+
+instance Buildable LT.Text where
+    build = fromLazyText
+    {-# INLINE build #-}
+
+instance Buildable ST.Text where
+    build = fromText
+    {-# INLINE build #-}
+
+instance Buildable Char where
+    build = singleton
+    {-# INLINE build #-}
+
+instance Buildable [Char] where
+    build = fromString
+    {-# INLINE build #-}
+
+instance Buildable Int8 where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Int16 where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Int32 where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Int where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Int64 where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Integer where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Word8 where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Word16 where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Word32 where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Word where
+    build = integral
+    {-# INLINE build #-}
+
+instance Buildable Word64 where
+    build = integral
+    {-# INLINE build #-}
+
+instance (Integral a, Buildable a) => Buildable (Ratio a) where
+    {-# SPECIALIZE instance Buildable (Ratio Integer) #-}
+    build a = build (numerator a) <> singleton '/' <> build (denominator a)
+
+instance Buildable Float where
+    build = showFloat
+    {-# INLINE build #-}
+
+instance Buildable Double where
+    build = showFloat
+    {-# INLINE build #-}
+
+instance Buildable (Fast Float) where
+    build = fshowFloat . fromFast
+    {-# INLINE build #-}
+
+instance Buildable (Fast Double) where
+    build = fshowFloat . fromFast
+    {-# INLINE build #-}
+
+instance Buildable DiffTime where
+    build = build . Shown
+    {-# INLINE build #-}
+
+instance Buildable NominalDiffTime where
+    build = build . Shown
+    {-# INLINE build #-}
+
+instance Buildable UTCTime where
+    build = build . Shown
+    {-# INLINE build #-}
+
+instance Buildable UniversalTime where
+    build = build . Shown . getModJulianDate
+    {-# INLINE build #-}
+
+instance Buildable Day where
+    build = fromString . showGregorian
+    {-# INLINE build #-}
+
+instance (Show a) => Buildable (Shown a) where
+    build = fromString . show . shown
+    {-# INLINE build #-}
+
+instance Buildable TimeOfDay where
+    build = build . Shown
+    {-# INLINE build #-}
+
+instance Buildable TimeZone where
+    build = build . Shown
+    {-# INLINE build #-}
+
+instance Buildable LocalTime where
+    build = build . Shown
+    {-# INLINE build #-}
+
+instance Buildable ZonedTime where
+    build = build . Shown
+    {-# INLINE build #-}

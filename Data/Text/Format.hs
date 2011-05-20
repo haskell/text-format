@@ -1,23 +1,50 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Data.Text.Format
-    where
+    (
+      Fast(..)
+    , Only(..)
+    , format
+    , build
+    , print
+    , hprint
+    , left
+    , right
+    ) where
 
-import Data.Monoid
-import qualified Data.Text.Lazy as LT
-import qualified Data.Text as ST
+import qualified Data.Text.Buildable as B
+import Data.Text.Format.Params (Params(..))
+import Data.Text.Format.Functions ((<>))
+import Data.Text.Format.Types (Fast(..), Only(..))
 import Data.Text.Lazy.Builder
-import Data.Text.Format.Param
-import Data.Text.Format.Params
+import Prelude hiding (print)
+import System.IO (Handle)
+import qualified Data.Text as ST
+import qualified Data.Text.Lazy as LT
+import qualified Data.Text.Lazy.IO as LT
 
 build :: Params ps => ST.Text -> ps -> Builder
-build fmt ps
-    | null xs && not ("{}" `ST.isInfixOf` fmt) = fromText fmt
-    | otherwise = zipParams (map fromText . ST.splitOn "{}" $ fmt) xs
-  where xs = buildParams ps
-        zipParams (f:fs) (y:ys) = f `mappend` y `mappend` zipParams fs ys
-        zipParams [f] [] = f
-        zipParams _ _ = error "oops"
+build fmt ps = zipParams (map fromText . ST.splitOn "{}" $ fmt) xs
+  where zipParams (f:fs) (y:ys) = f <> y <> zipParams fs ys
+        zipParams [f] []        = f
+        zipParams _ _ = error . LT.unpack $ format
+                        "Data.Text.Format.build: {} sites, but {} parameters"
+                        (ST.count "{}" fmt, length xs)
+        xs = buildParams ps
 
 format :: Params ps => ST.Text -> ps -> LT.Text
 format fmt ps = toLazyText $ build fmt ps
+
+print :: Params ps => ST.Text -> ps -> IO ()
+print fmt ps = LT.putStr . toLazyText $ build fmt ps
+
+hprint :: Params ps => Handle -> ST.Text -> ps -> IO ()
+hprint h fmt ps = LT.hPutStr h . toLazyText $ build fmt ps
+
+left :: B.Buildable a => Int -> Char -> a -> Builder
+left k c =
+    fromLazyText . LT.justifyLeft (fromIntegral k) c . toLazyText . B.build
+
+right :: B.Buildable a => Int -> Char -> a -> Builder
+right k c =
+    fromLazyText . LT.justifyRight (fromIntegral k) c . toLazyText . B.build

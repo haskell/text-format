@@ -26,18 +26,26 @@ flag developer
 library
   exposed-modules:
     Data.Text.Format
-    Data.Text.Format.Param
+    Data.Text.Buildable
     Data.Text.Format.Params
     Data.Text.Format.Types
 
   other-modules:
+    Data.Text.Format.Functions
     Data.Text.Format.Int
+    Data.Text.Format.RealFloat
+    Data.Text.Format.RealFloat.Fast
+    Data.Text.Format.RealFloat.Fast.Internal
+    Data.Text.Format.RealFloat.Functions
 
   build-depends:
+    array,
     base == 4.*,
     ghc-prim,
     integer-gmp,
-    text >= 0.11.0.5
+    old-locale,
+    text >= 0.11.0.8,
+    time
 
   if flag(developer)
     ghc-options: -Werror

@@ -16,9 +16,9 @@ module Data.Text.Format.Int
     , minus
     ) where
 
-import Data.Char (chr)
 import Data.Int (Int8, Int16, Int32, Int64)
-import Data.Monoid (mappend, mempty)
+import Data.Monoid (mempty)
+import Data.Text.Format.Functions ((<>), i2d)
 import Data.Text.Lazy.Builder
 import Data.Word (Word, Word8, Word16, Word32, Word64)
 import GHC.Base (quotInt, remInt)
@@ -52,14 +52,14 @@ integral :: Integral a => a -> Builder
 {-# SPECIALIZE integral :: Word64 -> Builder #-}
 {-# RULES "integral/Integer" integral = integer :: Integer -> Builder #-}
 integral i
-    | i < 0     = minus `mappend` go (-i)
+    | i < 0     = minus <> go (-i)
     | otherwise = go i
   where
     go n | n < 10    = digit n
-         | otherwise = go (n `quot` 10) `mappend` digit (n `rem` 10)
+         | otherwise = go (n `quot` 10) <> digit (n `rem` 10)
 
 digit :: Integral a => a -> Builder
-digit n = singleton $! chr (fromIntegral n + 48)
+digit n = singleton $! i2d (fromIntegral n + 48)
 {-# INLINE digit #-}
 
 minus :: Builder
@@ -72,7 +72,7 @@ int = integral
 integer :: Integer -> Builder
 integer (S# i#) = int (I# i#)
 integer i
-    | i < 0     = minus `mappend` go (-i)
+    | i < 0     = minus <> go (-i)
     | otherwise = go i
   where
     go n | n < maxInt = int (fromInteger n)
@@ -105,15 +105,15 @@ T maxInt maxDigits =
 putH :: [Integer] -> Builder
 putH (n:ns) = case n `quotRemInteger` maxInt of
                 PAIR(x,y)
-                    | q > 0     -> int q `mappend` pblock r `mappend` putB ns
-                    | otherwise -> int r `mappend` putB ns
+                    | q > 0     -> int q <> pblock r <> putB ns
+                    | otherwise -> int r <> putB ns
                     where q = fromInteger x
                           r = fromInteger y
 putH _ = error "putH: the impossible happened"
 
 putB :: [Integer] -> Builder
 putB (n:ns) = case n `quotRemInteger` maxInt of
-                PAIR(x,y) -> pblock q `mappend` pblock r `mappend` putB ns
+                PAIR(x,y) -> pblock q <> pblock r <> putB ns
                     where q = fromInteger x
                           r = fromInteger y
 putB _ = mempty
@@ -123,6 +123,6 @@ pblock = go maxDigits
   where
     go !d !n
         | d == 1    = digit n
-        | otherwise = go (d-1) q `mappend` digit r
+        | otherwise = go (d-1) q <> digit r
         where q = n `quotInt` 10
               r = n `remInt` 10

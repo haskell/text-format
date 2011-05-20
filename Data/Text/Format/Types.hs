@@ -1,7 +1,26 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 module Data.Text.Format.Types
     (
-      Only(..)
+      Format(..)
+    , Fast(..)
+    , Only(..)
+    , Shown(..)
     ) where
 
-newtype Only a = Only a
-    deriving (Eq, Ord, Read, Show)
+data Format = Exponent | Fixed | Generic
+
+newtype Fast a = Fast {
+      fromFast :: a
+    } deriving (Eq, Show, Read, Ord, Num, Fractional, Real, RealFrac,
+                Floating, RealFloat)
+
+newtype Only a = Only {
+      fromOnly :: a
+    } deriving (Eq, Show, Read, Ord, Num, Fractional, Real, RealFrac,
+                Floating, RealFloat, Enum, Integral, Bounded)
+
+newtype Shown a = Shown {
+      shown :: a
+    } deriving (Eq, Show, Read, Ord, Num, Fractional, Real, RealFrac,
+                Floating, RealFloat, Enum, Integral, Bounded)
