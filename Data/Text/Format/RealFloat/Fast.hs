@@ -22,7 +22,7 @@ import Data.Text.Format.Functions ((<>), i2d)
 import Data.Text.Format.Int (integral)
 import Data.Text.Format.RealFloat.Fast.Internal (posToDigits)
 import Data.Text.Format.RealFloat.Functions (roundTo)
-import Data.Text.Format.Types (Format(..))
+import Data.Text.Format.Types (FPFormat(..))
 import Data.Text.Lazy.Builder
 import qualified Data.Text as T
 
@@ -119,9 +119,9 @@ fshowGFloat    :: (DispFloat a) => Maybe Int -> a -> Builder
 {-# SPECIALIZE fshowGFloat :: Maybe Int -> Double -> Builder #-}
 fshowGFloat d x =  formatFloat Generic d x
 
-formatFloat :: DispFloat a => Format -> Maybe Int -> a -> Builder
-{-# SPECIALIZE formatFloat :: Format -> Maybe Int -> Float -> Builder #-}
-{-# SPECIALIZE formatFloat :: Format -> Maybe Int -> Double -> Builder #-}
+formatFloat :: DispFloat a => FPFormat -> Maybe Int -> a -> Builder
+{-# SPECIALIZE formatFloat :: FPFormat -> Maybe Int -> Float -> Builder #-}
+{-# SPECIALIZE formatFloat :: FPFormat -> Maybe Int -> Double -> Builder #-}
 formatFloat fmt decs x
     | isNaN x                   = "NaN"
     | isInfinite x              = if x < 0 then "-Infinity" else "Infinity"

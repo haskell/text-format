@@ -15,7 +15,7 @@ module Data.Text.Format.RealFloat
 import Data.Text.Format.Functions ((<>), i2d)
 import Data.Text.Format.RealFloat.Functions (roundTo)
 import Data.Text.Format.Int (integral)
-import Data.Text.Format.Types (Format(..))
+import Data.Text.Format.Types (FPFormat(..))
 import qualified Data.Text as T
 import Data.Array.Base (unsafeAt)
 import Data.Text.Lazy.Builder
@@ -29,9 +29,9 @@ showFloat :: (RealFloat a) => a -> Builder
 {-# SPECIALIZE showFloat :: Double -> Builder #-}
 showFloat x = formatRealFloat Generic Nothing x
 
-formatRealFloat :: (RealFloat a) => Format -> Maybe Int -> a -> Builder
-{-# SPECIALIZE formatRealFloat :: Format -> Maybe Int -> Float -> Builder #-}
-{-# SPECIALIZE formatRealFloat :: Format -> Maybe Int -> Double -> Builder #-}
+formatRealFloat :: (RealFloat a) => FPFormat -> Maybe Int -> a -> Builder
+{-# SPECIALIZE formatRealFloat :: FPFormat -> Maybe Int -> Float -> Builder #-}
+{-# SPECIALIZE formatRealFloat :: FPFormat -> Maybe Int -> Double -> Builder #-}
 formatRealFloat fmt decs x
    | isNaN x                   = "NaN"
    | isInfinite x              = if x < 0 then "-Infinity" else "Infinity"

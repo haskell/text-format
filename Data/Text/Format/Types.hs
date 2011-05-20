@@ -13,21 +13,21 @@
 
 module Data.Text.Format.Types
     (
-      Format(..)
+      FPFormat(..)
     , Fast(..)
     , Only(..)
     , Shown(..)
     ) where
 
 -- | Control the rendering of floating point numbers.
-data Format = Exponent
+data FPFormat = Exponent
               -- ^ Scientific notation (e.g. @2.3e123@).
-            | Fixed
+              | Fixed
               -- ^ Standard decimal notation.
-            | Generic
+              | Generic
               -- ^ Use decimal notation for values between @0.1@ and
               -- @9,999,999@, and scientific notation otherwise.
-            deriving (Enum, Read, Show)
+                deriving (Enum, Read, Show)
 
 -- | Render a floating point number using a much faster algorithm than
 -- the default (up to 10x faster). This performance comes with a
