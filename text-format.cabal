@@ -63,8 +63,8 @@ library
 
 source-repository head
   type:     git
-  location: http://github.com/mailrank/aeson
+  location: https://github.com/mailrank/text-format
 
 source-repository head
   type:     mercurial
-  location: http://bitbucket.org/bos/aeson
+  location: https://bitbucket.org/bos/text-format
