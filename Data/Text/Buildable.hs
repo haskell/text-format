@@ -20,9 +20,10 @@ import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Ratio (Ratio, denominator, numerator)
 import Data.Text.Format.Functions ((<>))
 import Data.Text.Format.Int (integral)
-import Data.Text.Format.RealFloat (showFloat)
-import Data.Text.Format.RealFloat.Fast (fshowFloat)
+import Data.Text.Format.RealFloat (formatRealFloat, showFloat)
+import Data.Text.Format.RealFloat.Fast (DispFloat, formatFloat, fshowFloat)
 import Data.Text.Format.Types (Fast(..), Shown(..))
+import Data.Text.Format.Types.Internal (FPControl(..))
 import Data.Text.Lazy.Builder
 import Data.Time.Calendar (Day, showGregorian)
 import Data.Time.Clock (DiffTime, NominalDiffTime, UTCTime, UniversalTime)
@@ -111,12 +112,16 @@ instance Buildable Double where
     build = showFloat
     {-# INLINE build #-}
 
-instance Buildable (Fast Float) where
+instance (RealFloat a) => Buildable (FPControl a) where
+    build (FPControl fmt decs x) = formatRealFloat fmt decs x
+    {-# INLINE build #-}
+
+instance (RealFloat a, DispFloat a) => Buildable (Fast a) where
     build = fshowFloat . fromFast
     {-# INLINE build #-}
 
-instance Buildable (Fast Double) where
-    build = fshowFloat . fromFast
+instance (RealFloat a, DispFloat a) => Buildable (Fast (FPControl a)) where
+    build (Fast (FPControl fmt decs x)) = formatFloat fmt decs x
     {-# INLINE build #-}
 
 instance Buildable DiffTime where

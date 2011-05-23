@@ -19,23 +19,28 @@ module Data.Text.Format
     -- ** Types for format control
     , Fast(..)
     , Shown(..)
-    -- * Functions
-    -- ** Rendering
+    -- * Rendering
     , format
     , print
     , hprint
     , build
-    -- ** Functions for format control
+    -- * Format control
     , left
     , right
+    -- ** Floating point numbers
+    , expt
+    , expt_
+    , fixed
+    , fixed_
     ) where
 
 import qualified Data.Text.Buildable as B
 import Data.Text.Format.Params (Params(..))
 import Data.Text.Format.Functions ((<>))
-import Data.Text.Format.Types.Internal (Fast(..), Format(..), Only(..), Shown(..))
+import Data.Text.Format.Types.Internal (FPControl(..), FPFormat(..), Fast(..))
+import Data.Text.Format.Types.Internal (Format(..), Only(..), Shown(..))
 import Data.Text.Lazy.Builder
-import Prelude hiding (print)
+import Prelude hiding (exp, print)
 import System.IO (Handle)
 import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
@@ -65,13 +70,38 @@ hprint :: Params ps => Handle -> Format -> ps -> IO ()
 hprint h fmt ps = LT.hPutStr h . toLazyText $ build fmt ps
 
 -- | Pad the left hand side of a string until it reaches @k@
--- characters wide, filling with character @c@.
+-- characters wide, if necessary filling with character @c@.
 left :: B.Buildable a => Int -> Char -> a -> Builder
 left k c =
     fromLazyText . LT.justifyLeft (fromIntegral k) c . toLazyText . B.build
 
 -- | Pad the right hand side of a string until it reaches @k@
--- characters wide, filling with character @c@.
+-- characters wide, if necessary filling with character @c@.
 right :: B.Buildable a => Int -> Char -> a -> Builder
 right k c =
     fromLazyText . LT.justifyRight (fromIntegral k) c . toLazyText . B.build
+
+-- ^ Render a floating point number using normal notation, with the
+-- given number of decimal places.
+fixed :: (B.Buildable a, RealFloat a) =>
+         Int
+      -- ^ Number of digits of precision after the decimal.
+      -> a -> Builder
+fixed decs = B.build . FPControl Fixed (Just decs)
+
+-- ^ Render a floating point number using normal notation.
+fixed_ :: (B.Buildable a, RealFloat a) => -> a -> Builder
+fixed_ = B.build . FPControl Fixed Nothing
+
+-- ^ Render a floating point number using scientific/engineering
+-- notation (e.g. @2.3e123@), with the given number of decimal places.
+expt :: (B.Buildable a, RealFloat a) =>
+        Int
+     -- ^ Number of digits of precision after the decimal.
+     -> a -> Builder
+expt decs = B.build . FPControl Exponent (Just decs)
+
+-- ^ Render a floating point number using scientific/engineering
+-- notation (e.g. @2.3e123@).
+expt_ :: (B.Buildable a, RealFloat a) => -> a -> Builder
+expt_ decs = B.build . FPControl Exponent Nothing

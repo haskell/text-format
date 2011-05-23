@@ -9,7 +9,8 @@
 
 module Data.Text.Format.RealFloat
     (
-      showFloat
+      formatRealFloat
+    , showFloat
     ) where
 
 import Data.Text.Format.Functions ((<>), i2d)

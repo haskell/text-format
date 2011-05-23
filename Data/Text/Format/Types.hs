@@ -14,9 +14,13 @@
 module Data.Text.Format.Types
     (
       Format
-    , Fast(..)
     , Only(..)
     , Shown(..)
+    -- * Floating point format control
+    , FPControl
+    , Fast(..)
+    , DispFloat
     ) where
 
 import Data.Text.Format.Types.Internal
+import Data.Text.Format.RealFloat.Fast (DispFloat)

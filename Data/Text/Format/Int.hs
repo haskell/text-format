@@ -11,8 +11,7 @@
 
 module Data.Text.Format.Int
     (
-      digit
-    , integral
+      integral
     , minus
     ) where
 
@@ -59,7 +58,7 @@ integral i
          | otherwise = go (n `quot` 10) <> digit (n `rem` 10)
 
 digit :: Integral a => a -> Builder
-digit n = singleton $! i2d (fromIntegral n + 48)
+digit n = singleton $! i2d (fromIntegral n)
 {-# INLINE digit #-}
 
 minus :: Builder

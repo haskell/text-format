@@ -16,6 +16,7 @@ module Data.Text.Format.RealFloat.Fast
     , fshowEFloat
     , fshowFFloat
     , fshowGFloat
+    , formatFloat
     ) where
 
 import Data.Text.Format.Functions ((<>), i2d)

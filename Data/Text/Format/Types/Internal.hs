@@ -14,10 +14,12 @@
 module Data.Text.Format.Types.Internal
     (
       Format(..)
-    , FPFormat(..)
-    , Fast(..)
     , Only(..)
     , Shown(..)
+    -- * Floating point format control
+    , Fast(..)
+    , FPControl(..)
+    , FPFormat(..)
     ) where
 
 import Data.Monoid (Monoid(..))
@@ -62,6 +64,9 @@ data FPFormat = Exponent
               -- ^ Use decimal notation for values between @0.1@ and
               -- @9,999,999@, and scientific notation otherwise.
                 deriving (Enum, Read, Show)
+
+-- | A floating point number, complete with rendering instructions.
+data FPControl a = FPControl FPFormat (Maybe Int) a
 
 -- | Render a floating point number using a much faster algorithm than
 -- the default (up to 10x faster). This performance comes with a
