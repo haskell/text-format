@@ -23,6 +23,9 @@ import Data.Text.Lazy.Builder
 class Params ps where
     buildParams :: ps -> [Builder]
 
+instance Params () where
+    buildParams _ = []
+
 instance (Buildable a) => Params (Only a) where
     buildParams (Only a) = [build a]
 

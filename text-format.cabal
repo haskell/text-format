@@ -11,13 +11,14 @@ stability:      experimental
 tested-with:    GHC == 7.0.3
 synopsis:       Text formatting
 cabal-version:  >= 1.8
-build-type:      Simple
+build-type:     Simple
 description:
     A text formatting library optimized for ease of use and high
     performance.
 
 extra-source-files:
     README.markdown
+    tests/Benchmarks.hs
 
 flag developer
   description: operate in developer mode
@@ -52,7 +53,7 @@ library
     ghc-options: -Werror
     ghc-prof-options: -auto-all
 
-  ghc-options:      -Wall
+  ghc-options: -Wall
 
   cpp-options: -DINTEGER_GMP
 
