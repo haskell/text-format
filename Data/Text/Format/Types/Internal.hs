@@ -16,6 +16,8 @@ module Data.Text.Format.Types.Internal
       Format(..)
     , Only(..)
     , Shown(..)
+    -- * Integer format control
+    , Hex(..)
     -- * Floating point format control
     , Fast(..)
     , FPControl(..)
@@ -54,6 +56,10 @@ instance Monoid Format where
 
 instance IsString Format where
     fromString = Format . fromString
+
+-- | Render an integral type in hexadecimal.
+newtype Hex a = Hex a
+    deriving (Eq, Ord, Read, Show, Num, Real, Enum, Integral)
 
 -- | Control the rendering of floating point numbers.
 data FPFormat = Exponent

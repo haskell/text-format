@@ -12,6 +12,7 @@
 module Data.Text.Format.Int
     (
       decimal
+    , hexadecimal
     , minus
     ) where
 
@@ -49,7 +50,7 @@ decimal :: Integral a => a -> Builder
 {-# SPECIALIZE decimal :: Word16 -> Builder #-}
 {-# SPECIALIZE decimal :: Word32 -> Builder #-}
 {-# SPECIALIZE decimal :: Word64 -> Builder #-}
-{-# RULES "decimal/Integer" decimal = integer :: Integer -> Builder #-}
+{-# RULES "decimal/Integer" decimal = integer 10 :: Integer -> Builder #-}
 decimal i
     | i < 0     = minus <> go (-i)
     | otherwise = go i
@@ -57,9 +58,34 @@ decimal i
     go n | n < 10    = digit n
          | otherwise = go (n `quot` 10) <> digit (n `rem` 10)
 
+hexadecimal :: Integral a => a -> Builder
+{-# SPECIALIZE hexadecimal :: Int -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Int8 -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Int16 -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Int32 -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Int64 -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Word -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Word8 -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Word16 -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Word32 -> Builder #-}
+{-# SPECIALIZE hexadecimal :: Word64 -> Builder #-}
+{-# RULES "hexadecimal/Integer" hexadecimal = integer 16 :: Integer -> Builder #-}
+hexadecimal i
+    | i < 0     = minus <> go (-i)
+    | otherwise = go i
+  where
+    go n | n < 16    = hexDigit n
+         | otherwise = go (n `quot` 16) <> hexDigit (n `rem` 16)
+
 digit :: Integral a => a -> Builder
 digit n = singleton $! i2d (fromIntegral n)
 {-# INLINE digit #-}
+
+hexDigit :: Integral a => a -> Builder
+hexDigit n
+    | n <= 9    = singleton $! i2d (fromIntegral n)
+    | otherwise = singleton $! toEnum (fromIntegral n + 87)
+{-# INLINE hexDigit #-}
 
 minus :: Builder
 minus = singleton '-'
@@ -68,9 +94,12 @@ int :: Int -> Builder
 int = decimal
 {-# INLINE int #-}
 
-integer :: Integer -> Builder
-integer (S# i#) = int (I# i#)
-integer i
+data T = T !Integer !Int
+
+integer :: Int -> Integer -> Builder
+integer 10 (S# i#) = decimal (I# i#)
+integer 16 (S# i#) = hexadecimal (I# i#)
+integer base i
     | i < 0     = minus <> go (-i)
     | otherwise = go i
   where
@@ -90,38 +119,38 @@ integer i
                         PAIR(q,r) -> q : r : splitb p ns
     splitb _ _      = []
 
-data T = T !Integer !Int
+    T maxInt10 maxDigits10 =
+        until ((>mi) . (*10) . fstT) (\(T n d) -> T (n*10) (d+1)) (T 10 1)
+      where mi = fromIntegral (maxBound :: Int)
+    T maxInt16 maxDigits16 =
+        until ((>mi) . (*16) . fstT) (\(T n d) -> T (n*16) (d+1)) (T 16 1)
+      where mi = fromIntegral (maxBound :: Int)
 
-fstT :: T -> Integer
-fstT (T a _) = a
+    fstT (T a _) = a
 
-maxInt :: Integer
-maxDigits :: Int
-T maxInt maxDigits =
-    until ((>mi) . (*10) . fstT) (\(T n d) -> T (n*10) (d+1)) (T 10 1)
-  where mi = fromIntegral (maxBound :: Int)
+    maxInt | base == 10 = maxInt10
+           | otherwise  = maxInt16
+    maxDigits | base == 10 = maxDigits10
+              | otherwise  = maxDigits16
 
-putH :: [Integer] -> Builder
-putH (n:ns) = case n `quotRemInteger` maxInt of
-                PAIR(x,y)
-                    | q > 0     -> int q <> pblock r <> putB ns
-                    | otherwise -> int r <> putB ns
-                    where q = fromInteger x
-                          r = fromInteger y
-putH _ = error "putH: the impossible happened"
+    putH (n:ns) = case n `quotRemInteger` maxInt of
+                    PAIR(x,y)
+                        | q > 0     -> int q <> pblock r <> putB ns
+                        | otherwise -> int r <> putB ns
+                        where q = fromInteger x
+                              r = fromInteger y
+    putH _ = error "putH: the impossible happened"
 
-putB :: [Integer] -> Builder
-putB (n:ns) = case n `quotRemInteger` maxInt of
-                PAIR(x,y) -> pblock q <> pblock r <> putB ns
-                    where q = fromInteger x
-                          r = fromInteger y
-putB _ = mempty
+    putB (n:ns) = case n `quotRemInteger` maxInt of
+                    PAIR(x,y) -> pblock q <> pblock r <> putB ns
+                        where q = fromInteger x
+                              r = fromInteger y
+    putB _ = mempty
 
-pblock :: Int -> Builder
-pblock = go maxDigits
-  where
-    go !d !n
-        | d == 1    = digit n
-        | otherwise = go (d-1) q <> digit r
-        where q = n `quotInt` 10
-              r = n `remInt` 10
+    pblock = loop maxDigits
+      where
+        loop !d !n
+            | d == 1    = digit n
+            | otherwise = loop (d-1) q <> digit r
+            where q = n `quotInt` base
+                  r = n `remInt` base

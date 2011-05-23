@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances, OverloadedStrings #-}
 
 -- |
 -- Module      : Data.Text.Buildable
@@ -19,10 +19,10 @@ module Data.Text.Buildable
 import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Ratio (Ratio, denominator, numerator)
 import Data.Text.Format.Functions ((<>))
-import Data.Text.Format.Int (decimal)
+import Data.Text.Format.Int (decimal, hexadecimal)
 import Data.Text.Format.RealFloat (formatRealFloat, showFloat)
 import Data.Text.Format.RealFloat.Fast (DispFloat, formatFloat, fshowFloat)
-import Data.Text.Format.Types (Fast(..), Shown(..))
+import Data.Text.Format.Types (Fast(..), Hex(..), Shown(..))
 import Data.Text.Format.Types.Internal (FPControl(..))
 import Data.Text.Lazy.Builder
 import Data.Time.Calendar (Day, showGregorian)
@@ -30,6 +30,7 @@ import Data.Time.Clock (DiffTime, NominalDiffTime, UTCTime, UniversalTime)
 import Data.Time.Clock (getModJulianDate)
 import Data.Time.LocalTime (LocalTime, TimeOfDay, TimeZone, ZonedTime)
 import Data.Word (Word, Word8, Word16, Word32, Word64)
+import Foreign.Ptr (IntPtr, WordPtr, Ptr, ptrToWordPtr)
 import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
 
@@ -54,6 +55,10 @@ instance Buildable Char where
 
 instance Buildable [Char] where
     build = fromString
+    {-# INLINE build #-}
+
+instance (Integral a) => Buildable (Hex a) where
+    build = hexadecimal
     {-# INLINE build #-}
 
 instance Buildable Int8 where
@@ -163,3 +168,12 @@ instance Buildable LocalTime where
 instance Buildable ZonedTime where
     build = build . Shown
     {-# INLINE build #-}
+
+instance Buildable IntPtr where
+    build p = fromText "0x" <> hexadecimal p
+
+instance Buildable WordPtr where
+    build p = fromText "0x" <> hexadecimal p
+
+instance Buildable (Ptr a) where
+    build = build . ptrToWordPtr

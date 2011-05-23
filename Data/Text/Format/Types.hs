@@ -16,6 +16,8 @@ module Data.Text.Format.Types
       Format
     , Only(..)
     , Shown(..)
+    -- * Integer format control
+    , Hex(..)
     -- * Floating point format control
     , FPControl
     , Fast(..)
