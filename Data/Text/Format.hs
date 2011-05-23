@@ -90,7 +90,7 @@ fixed :: (B.Buildable a, RealFloat a) =>
 fixed decs = B.build . FPControl Fixed (Just decs)
 
 -- ^ Render a floating point number using normal notation.
-fixed_ :: (B.Buildable a, RealFloat a) => -> a -> Builder
+fixed_ :: (B.Buildable a, RealFloat a) => a -> Builder
 fixed_ = B.build . FPControl Fixed Nothing
 
 -- ^ Render a floating point number using scientific/engineering
@@ -103,5 +103,5 @@ expt decs = B.build . FPControl Exponent (Just decs)
 
 -- ^ Render a floating point number using scientific/engineering
 -- notation (e.g. @2.3e123@).
-expt_ :: (B.Buildable a, RealFloat a) => -> a -> Builder
-expt_ decs = B.build . FPControl Exponent Nothing
+expt_ :: (B.Buildable a, RealFloat a) => a -> Builder
+expt_ = B.build . FPControl Exponent Nothing

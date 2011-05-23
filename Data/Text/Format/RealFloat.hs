@@ -15,7 +15,7 @@ module Data.Text.Format.RealFloat
 
 import Data.Text.Format.Functions ((<>), i2d)
 import Data.Text.Format.RealFloat.Functions (roundTo)
-import Data.Text.Format.Int (integral)
+import Data.Text.Format.Int (decimal)
 import Data.Text.Format.Types.Internal (FPFormat(..))
 import qualified Data.Text as T
 import Data.Array.Base (unsafeAt)
@@ -48,7 +48,7 @@ formatRealFloat fmt decs x
      Exponent ->
       case decs of
        Nothing ->
-        let show_e' = integral (e-1) in
+        let show_e' = decimal (e-1) in
         case ds of
           "0"     -> "0.0e0"
           [d]     -> singleton d <> ".0e" <> show_e'
@@ -63,7 +63,7 @@ formatRealFloat fmt decs x
            (ei,is') = roundTo (dec'+1) is
            (d:ds') = map i2d (if ei > 0 then init is' else is')
           in
-          singleton d <> singleton '.' <> fromString ds' <> singleton 'e' <> integral (e-1+ei)
+          singleton d <> singleton '.' <> fromString ds' <> singleton 'e' <> decimal (e-1+ei)
      Fixed ->
       let
        mk0 ls = case ls of { "" -> "0" ; _ -> fromString ls}

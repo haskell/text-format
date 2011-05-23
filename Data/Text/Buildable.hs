@@ -19,7 +19,7 @@ module Data.Text.Buildable
 import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Ratio (Ratio, denominator, numerator)
 import Data.Text.Format.Functions ((<>))
-import Data.Text.Format.Int (integral)
+import Data.Text.Format.Int (decimal)
 import Data.Text.Format.RealFloat (formatRealFloat, showFloat)
 import Data.Text.Format.RealFloat.Fast (DispFloat, formatFloat, fshowFloat)
 import Data.Text.Format.Types (Fast(..), Shown(..))
@@ -57,47 +57,47 @@ instance Buildable [Char] where
     {-# INLINE build #-}
 
 instance Buildable Int8 where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Int16 where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Int32 where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Int where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Int64 where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Integer where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Word8 where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Word16 where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Word32 where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Word where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance Buildable Word64 where
-    build = integral
+    build = decimal
     {-# INLINE build #-}
 
 instance (Integral a, Buildable a) => Buildable (Ratio a) where

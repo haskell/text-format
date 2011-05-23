@@ -11,7 +11,7 @@
 
 module Data.Text.Format.Int
     (
-      integral
+      decimal
     , minus
     ) where
 
@@ -38,19 +38,19 @@ import GHC.Integer.GMP.Internals
 # define PAIR(a,b) (a,b)
 #endif
 
-integral :: Integral a => a -> Builder
-{-# SPECIALIZE integral :: Int -> Builder #-}
-{-# SPECIALIZE integral :: Int8 -> Builder #-}
-{-# SPECIALIZE integral :: Int16 -> Builder #-}
-{-# SPECIALIZE integral :: Int32 -> Builder #-}
-{-# SPECIALIZE integral :: Int64 -> Builder #-}
-{-# SPECIALIZE integral :: Word -> Builder #-}
-{-# SPECIALIZE integral :: Word8 -> Builder #-}
-{-# SPECIALIZE integral :: Word16 -> Builder #-}
-{-# SPECIALIZE integral :: Word32 -> Builder #-}
-{-# SPECIALIZE integral :: Word64 -> Builder #-}
-{-# RULES "integral/Integer" integral = integer :: Integer -> Builder #-}
-integral i
+decimal :: Integral a => a -> Builder
+{-# SPECIALIZE decimal :: Int -> Builder #-}
+{-# SPECIALIZE decimal :: Int8 -> Builder #-}
+{-# SPECIALIZE decimal :: Int16 -> Builder #-}
+{-# SPECIALIZE decimal :: Int32 -> Builder #-}
+{-# SPECIALIZE decimal :: Int64 -> Builder #-}
+{-# SPECIALIZE decimal :: Word -> Builder #-}
+{-# SPECIALIZE decimal :: Word8 -> Builder #-}
+{-# SPECIALIZE decimal :: Word16 -> Builder #-}
+{-# SPECIALIZE decimal :: Word32 -> Builder #-}
+{-# SPECIALIZE decimal :: Word64 -> Builder #-}
+{-# RULES "decimal/Integer" decimal = integer :: Integer -> Builder #-}
+decimal i
     | i < 0     = minus <> go (-i)
     | otherwise = go i
   where
@@ -65,7 +65,7 @@ minus :: Builder
 minus = singleton '-'
 
 int :: Int -> Builder
-int = integral
+int = decimal
 {-# INLINE int #-}
 
 integer :: Integer -> Builder
