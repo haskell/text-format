@@ -1,5 +1,5 @@
 ^(?:cabal-dev|dist)$
-^benchmarks/(?:bm|simple|sprintf|swprintf)$
+^benchmarks/(?:bm|simple|c-printf|c-wprintf)$
 \.(?:aux|eventlog|h[ip]|log|[oa]|orig|prof|ps|rej|swp)$
 ~$
 syntax: glob

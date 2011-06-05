@@ -1,6 +1,6 @@
 ghc := ghc
 
-programs := bm simple sprintf swprintf
+programs := bm simple c-printf c-wprintf
 
 all: $(programs)
 
@@ -10,10 +10,10 @@ bm: Benchmarks.hs
 simple: Simple.hs
 	$(ghc) -rtsopts -O -o $@ $<
 
-sprintf: sprintf.c
+c-printf: printf.c
 	$(CC) -O2 -o $@ $<
 
-swprintf: swprintf.c
+c-wprintf: wprintf.c
 	$(CC) -O2 -o $@ $<
 
 clean:

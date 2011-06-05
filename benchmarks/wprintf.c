@@ -17,13 +17,8 @@ void loop(int count)
 {
     int i;
 
-    for (i = 0; i < count; i++) {
-	wchar_t *s = malloc(64 * sizeof(wchar_t));
-
-	swprintf(s, 64, L"hi mom %g\n", (double) i * M_PI);
-
-	free(s);
-    }
+    for (i = 0; i < count; i++)
+	wprintf(L"hi mom %g\n", (double) i * M_PI);
 }
 
 int main(int argc, char **argv)
@@ -39,6 +34,6 @@ int main(int argc, char **argv)
 
     elapsed = gettime() - start;
 
-    printf("%d iterations in %g secs (%g thousand/sec)\n", count, elapsed,
-	   count / elapsed / 1e3);
+    fprintf(stderr, "%d iterations in %g secs (%g thousand/sec)\n",
+	    count, elapsed, count / elapsed / 1e3);
 }
