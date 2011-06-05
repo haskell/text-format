@@ -34,6 +34,7 @@ module Data.Text.Format
     , expt_
     , fixed
     , fixed_
+    , generic
     ) where
 
 import qualified Data.Text.Buildable as B
@@ -82,6 +83,15 @@ left k c =
 right :: B.Buildable a => Int -> Char -> a -> Builder
 right k c =
     fromLazyText . LT.justifyLeft (fromIntegral k) c . toLazyText . B.build
+
+-- ^ Render a floating point number, with the given number of decimal
+-- places.  Use decimal notation for values between @0.1@ and
+-- @9,999,999@, and scientific notation otherwise.
+generic :: (B.Buildable a, RealFloat a) =>
+         Int
+      -- ^ Number of digits of precision after the decimal.
+      -> a -> Builder
+generic decs = B.build . FPControl Generic (Just decs)
 
 -- ^ Render a floating point number using normal notation, with the
 -- given number of decimal places.
