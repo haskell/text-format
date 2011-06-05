@@ -85,7 +85,7 @@ right k c =
     fromLazyText . LT.justifyLeft (fromIntegral k) c . toLazyText . B.build
 
 -- ^ Render a floating point number, with the given number of decimal
--- places.  Use decimal notation for values between @0.1@ and
+-- places.  Uses decimal notation for values between @0.1@ and
 -- @9,999,999@, and scientific notation otherwise.
 generic :: (B.Buildable a, RealFloat a) =>
          Int
