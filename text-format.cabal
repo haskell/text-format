@@ -1,5 +1,5 @@
 name:           text-format
-version:        0.2.0.0
+version:        0.2.1.0
 license:        BSD3
 license-file:   LICENSE
 homepage:       https://github.com/mailrank/text-format
@@ -47,7 +47,8 @@ library
     integer-gmp,
     old-locale,
     text >= 0.11.0.8,
-    time
+    time,
+    transformers
 
   if flag(developer)
     ghc-options: -Werror

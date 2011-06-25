@@ -37,15 +37,16 @@ module Data.Text.Format
     , generic
     ) where
 
-import qualified Data.Text.Buildable as B
-import Data.Text.Format.Params (Params(..))
+import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Text.Format.Functions ((<>))
+import Data.Text.Format.Params (Params(..))
 import Data.Text.Format.Types.Internal (FPControl(..), FPFormat(..), Fast(..))
 import Data.Text.Format.Types.Internal (Format(..), Hex(..), Only(..), Shown(..))
 import Data.Text.Lazy.Builder
 import Prelude hiding (exp, print)
 import System.IO (Handle)
 import qualified Data.Text as ST
+import qualified Data.Text.Buildable as B
 import qualified Data.Text.Lazy as LT
 import qualified Data.Text.Lazy.IO as LT
 
@@ -64,13 +65,15 @@ format :: Params ps => Format -> ps -> LT.Text
 format fmt ps = toLazyText $ build fmt ps
 
 -- | Render a format string and arguments, then print the result.
-print :: Params ps => Format -> ps -> IO ()
-print fmt ps = LT.putStr . toLazyText $ build fmt ps
+print :: (MonadIO m, Params ps) => Format -> ps -> m ()
+{-# SPECIALIZE print :: (Params ps) => Format -> ps -> IO () #-}
+print fmt ps = liftIO . LT.putStr . toLazyText $ build fmt ps
 
 -- | Render a format string and arguments, then print the result to
 -- the given file handle.
-hprint :: Params ps => Handle -> Format -> ps -> IO ()
-hprint h fmt ps = LT.hPutStr h . toLazyText $ build fmt ps
+hprint :: (MonadIO m, Params ps) => Handle -> Format -> ps -> m ()
+{-# SPECIALIZE hprint :: (Params ps) => Handle -> Format -> ps -> IO () #-}
+hprint h fmt ps = liftIO . LT.hPutStr h . toLazyText $ build fmt ps
 
 -- | Pad the left hand side of a string until it reaches @k@
 -- characters wide, if necessary filling with character @c@.
