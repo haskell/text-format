@@ -4,6 +4,13 @@ import Criterion.Main
 import Data.Text.Format
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as L
+import qualified Text.Printf as P
+
+printf1 :: (P.PrintfArg a) => String -> a -> String
+printf1 f a = P.printf f a
+
+printf2 :: (P.PrintfArg a, P.PrintfArg b) => String -> (a,b) -> String
+printf2 f (a,b) = P.printf f a b
 
 main = defaultMain [
          bgroup "arity" [
@@ -15,6 +22,12 @@ main = defaultMain [
                        (T.pack "mom", T.pack "you", T.pack "now")
          , bench "4" $ nf (format "hi {}, {} - how are {} keeping {}")
                        (T.pack "mom", T.pack "hey", T.pack "you", T.pack "now")
+         ]
+       , bgroup "comparison" [
+           bench "format1" $ nf (format "hi mom {}\n") (Only (pi::Double))
+         , bench "printf1" $ nf (printf1 "hi mom %f\n") (pi::Double)
+         , bench "format2" $ nf (format "hi mom {} {}\n") (pi::Double, "yeah"::T.Text)
+         , bench "printf2" $ nf (printf2 "hi mom %f %s\n") (pi::Double, "yeah"::String)
          ]
        , bgroup "types" [
            bench "unit" $ nf (format "hi") ()
