@@ -18,7 +18,9 @@ description:
 
 extra-source-files:
     README.markdown
-    tests/Benchmarks.hs
+    benchmarks/Makefile
+    benchmarks/*.c
+    benchmarks/*.hs
 
 flag developer
   description: operate in developer mode
