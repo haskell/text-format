@@ -43,8 +43,8 @@ import Data.Typeable (Typeable)
 --
 -- The underlying type is 'Text', so literal Haskell strings that
 -- contain Unicode characters will be correctly handled.
-newtype Format = Format Text
-    deriving (Eq, Ord, Typeable)
+newtype Format = Format { fromFormat :: Text }
+    deriving (Eq, Ord, Typeable, Show)
 
 instance Monoid Format where
     Format a `mappend` Format b = Format (a `mappend` b)

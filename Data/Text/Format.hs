@@ -48,30 +48,46 @@ import qualified Data.Text.Buildable as B
 import qualified Data.Text.Lazy as LT
 import qualified Data.Text.Lazy.IO as LT
 
+-- Format strings are almost always constants, and they're expensive
+-- to interpret (which we refer to as "cracking" here).  We'd really
+-- like to have GHC memoize the cracking of a known-constant format
+-- string, so that it occurs at most once.
+--
+-- To achieve this, we arrange to have the cracked version of a format
+-- string let-floated out as a CAF, by inlining the definitions of
+-- build and functions that invoke it.  This works well with GHC 7.
+
 -- | Render a format string and arguments to a 'Builder'.
 build :: Params ps => Format -> ps -> Builder
-build (Format fmt) ps = zipParams (map fromText . ST.splitOn "{}" $ fmt) xs
-  where zipParams (f:fs) (y:ys) = f <> y <> zipParams fs ys
-        zipParams [f] []        = f
-        zipParams _ _ = error . LT.unpack $ format
-                        "Data.Text.Format.build: {} sites, but {} parameters"
-                        (ST.count "{}" fmt, length xs)
-        xs = buildParams ps
+build fmt ps = zipParams fmt (crack fmt) (buildParams ps)
+{-# INLINE build #-}
+
+zipParams :: Format -> [Builder] -> [Builder] -> Builder
+zipParams fmt xs = go xs
+  where go (f:fs) (y:ys) = f <> y <> go fs ys
+        go [f] []        = f
+        go _ _ = error . LT.unpack $ format
+                 "Data.Text.Format.build: {} sites, but {} parameters"
+                 (ST.count "{}" (fromFormat fmt), length xs)
+
+crack :: Format -> [Builder]
+crack = map fromText . ST.splitOn "{}" . fromFormat
 
 -- | Render a format string and arguments to a 'LT.Text'.
 format :: Params ps => Format -> ps -> LT.Text
 format fmt ps = toLazyText $ build fmt ps
+{-# INLINE format #-}
 
 -- | Render a format string and arguments, then print the result.
 print :: (MonadIO m, Params ps) => Format -> ps -> m ()
-{-# SPECIALIZE print :: (Params ps) => Format -> ps -> IO () #-}
 print fmt ps = liftIO . LT.putStr . toLazyText $ build fmt ps
+{-# INLINE print #-}
 
 -- | Render a format string and arguments, then print the result to
 -- the given file handle.
 hprint :: (MonadIO m, Params ps) => Handle -> Format -> ps -> m ()
-{-# SPECIALIZE hprint :: (Params ps) => Handle -> Format -> ps -> IO () #-}
 hprint h fmt ps = liftIO . LT.hPutStr h . toLazyText $ build fmt ps
+{-# INLINE hprint #-}
 
 -- | Pad the left hand side of a string until it reaches @k@
 -- characters wide, if necessary filling with character @c@.
@@ -120,3 +136,4 @@ expt decs = B.build . C.toExponential decs . realToFrac
 -- is added.)
 hex :: Integral a => a -> Builder
 hex = B.build . Hex
+{-# INLINE hex #-}
