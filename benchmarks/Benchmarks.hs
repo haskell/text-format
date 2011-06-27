@@ -24,28 +24,14 @@ main = defaultMain [
            , bench "large" $ nf (format "hi {}") (Only (0x7fffffff::Int))
            ]
          , bgroup "float" [
-             bgroup "slow" [
-               bench "small" $ nf (format "hi {}") (Only (1::Float))
-             , bench "medium" $ nf (format "hi {}") (Only (pi::Float))
-             , bench "large" $ nf (format "hi {}") (Only (pi*1e37::Float))
-             ]
-           , bgroup "fast" [
-               bench "small" $ nf (format "hi {}") (Only (1::Fast Float))
-             , bench "medium" $ nf (format "hi {}") (Only (pi::Fast Float))
-             , bench "large" $ nf (format "hi {}") (Only (pi*1e37::Fast Float))
-             ]
+             bench "small" $ nf (format "hi {}") (Only (1::Float))
+           , bench "medium" $ nf (format "hi {}") (Only (pi::Float))
+           , bench "large" $ nf (format "hi {}") (Only (pi*1e37::Float))
            ]
          , bgroup "double" [
-             bgroup "slow" [
-               bench "small" $ nf (format "hi {}") (Only (1::Double))
-             , bench "medium" $ nf (format "hi {}") (Only (pi::Double))
-             , bench "large" $ nf (format "hi {}") (Only (pi*1e37::Double))
-             ]
-           , bgroup "fast" [
-               bench "small" $ nf (format "hi {}") (Only (1::Fast Double))
-             , bench "medium" $ nf (format "hi {}") (Only (pi::Fast Double))
-             , bench "large" $ nf (format "hi {}") (Only (pi*1e37::Fast Double))
-             ]
+             bench "small" $ nf (format "hi {}") (Only (1::Double))
+           , bench "medium" $ nf (format "hi {}") (Only (pi::Double))
+           , bench "large" $ nf (format "hi {}") (Only (pi*1e37::Double))
            ]
          , bgroup "string" [
              bench "small" $ nf (format "hi {}") (Only ("mom" :: String))

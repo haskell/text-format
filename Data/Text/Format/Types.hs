@@ -18,11 +18,6 @@ module Data.Text.Format.Types
     , Shown(..)
     -- * Integer format control
     , Hex(..)
-    -- * Floating point format control
-    , FPControl
-    , Fast(..)
-    , DispFloat
     ) where
 
 import Data.Text.Format.Types.Internal
-import Data.Text.Format.RealFloat.Fast (DispFloat)

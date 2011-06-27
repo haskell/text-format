@@ -1,6 +1,6 @@
 {-# LANGUAGE BangPatterns, OverloadedStrings #-}
 
-module Main (main) where
+--module Main (main) where
 
 import Control.Monad
 import System.Environment
@@ -33,6 +33,13 @@ double count = counting count $ \i x -> do
   let t = T.format "hi mom {}\n" (Only (fromIntegral i * pi::Double))
   L.putStr . encodeUtf8 $ t
 
+dpi :: Double
+dpi = pi
+
+p6 count = counting count $ \i x -> do
+  let t = T.format "hi mom {}\n" (Only (prec 6 $! fromIntegral i * dpi))
+  L.putStr . encodeUtf8 $ t
+
 main = do
   args <- getArgs
   let count = case args of
@@ -43,6 +50,7 @@ main = do
              ("plain":_)  -> plain
              ("unit":_)   -> unit
              ("double":_) -> double
+             ("p6":_) -> p6
              ("int":_)    -> int
              _            -> error "wut?"
   start <- getCurrentTime

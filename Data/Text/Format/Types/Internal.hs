@@ -18,10 +18,6 @@ module Data.Text.Format.Types.Internal
     , Shown(..)
     -- * Integer format control
     , Hex(..)
-    -- * Floating point format control
-    , Fast(..)
-    , FPControl(..)
-    , FPFormat(..)
     ) where
 
 import Data.Monoid (Monoid(..))
@@ -60,29 +56,6 @@ instance IsString Format where
 -- | Render an integral type in hexadecimal.
 newtype Hex a = Hex a
     deriving (Eq, Ord, Read, Show, Num, Real, Enum, Integral)
-
--- | Control the rendering of floating point numbers.
-data FPFormat = Exponent
-              -- ^ Scientific notation (e.g. @2.3e123@).
-              | Fixed
-              -- ^ Standard decimal notation.
-              | Generic
-              -- ^ Use decimal notation for values between @0.1@ and
-              -- @9,999,999@, and scientific notation otherwise.
-                deriving (Enum, Read, Show)
-
--- | A floating point number, complete with rendering instructions.
-data FPControl a = FPControl FPFormat (Maybe Int) a
-
--- | Render a floating point number using a much faster algorithm than
--- the default (up to 10x faster). This performance comes with a
--- potential cost in readability, as the faster algorithm can produce
--- strings that are longer than the default algorithm
--- (e.g. \"@1.3300000000000001@\" instead of \"@1.33@\").
-newtype Fast a = Fast {
-      fromFast :: a
-    } deriving (Eq, Show, Read, Ord, Num, Fractional, Real, RealFrac,
-                Floating, RealFloat)
 
 -- | Use this @newtype@ wrapper for your single parameter if you are
 -- formatting a string containing exactly one substitution site.

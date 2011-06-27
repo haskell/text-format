@@ -34,15 +34,12 @@ library
   other-modules:
     Data.Text.Format.Functions
     Data.Text.Format.Int
-    Data.Text.Format.RealFloat
-    Data.Text.Format.RealFloat.Fast
-    Data.Text.Format.RealFloat.Fast.Internal
-    Data.Text.Format.RealFloat.Functions
     Data.Text.Format.Types.Internal
 
   build-depends:
     array,
     base == 4.*,
+    double-conversion,
     ghc-prim,
     integer-gmp,
     old-locale,

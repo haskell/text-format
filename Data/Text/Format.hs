@@ -17,7 +17,6 @@ module Data.Text.Format
       Format
     , Only(..)
     -- ** Types for format control
-    , Fast(..)
     , Shown(..)
     -- * Rendering
     , format
@@ -31,20 +30,19 @@ module Data.Text.Format
     , hex
     -- ** Floating point numbers
     , expt
-    , expt_
     , fixed
-    , fixed_
-    , generic
+    , prec
     ) where
 
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Text.Format.Functions ((<>))
 import Data.Text.Format.Params (Params(..))
-import Data.Text.Format.Types.Internal (FPControl(..), FPFormat(..), Fast(..))
-import Data.Text.Format.Types.Internal (Format(..), Hex(..), Only(..), Shown(..))
+import Data.Text.Format.Types.Internal (Format(..), Only(..), Shown(..))
+import Data.Text.Format.Types.Internal (Hex(..))
 import Data.Text.Lazy.Builder
 import Prelude hiding (exp, print)
 import System.IO (Handle)
+import qualified Data.Double.Conversion as C
 import qualified Data.Text as ST
 import qualified Data.Text.Buildable as B
 import qualified Data.Text.Lazy as LT
@@ -87,39 +85,36 @@ right :: B.Buildable a => Int -> Char -> a -> Builder
 right k c =
     fromLazyText . LT.justifyLeft (fromIntegral k) c . toLazyText . B.build
 
--- ^ Render a floating point number, with the given number of decimal
--- places.  Uses decimal notation for values between @0.1@ and
+-- ^ Render a floating point number, with the given number of digits
+-- of precision.  Uses decimal notation for values between @0.1@ and
 -- @9,999,999@, and scientific notation otherwise.
-generic :: (B.Buildable a, RealFloat a) =>
-         Int
-      -- ^ Number of digits of precision after the decimal.
-      -> a -> Builder
-generic decs = B.build . FPControl Generic (Just decs)
+prec :: (Real a) =>
+        Int
+     -- ^ Number of digits of precision.
+     -> a -> Builder
+{-# RULES "prec/Double"
+    forall d x. prec d (x::Double) = B.build (C.toPrecision d x) #-}
+prec digits = B.build . C.toPrecision digits . realToFrac
 
 -- ^ Render a floating point number using normal notation, with the
 -- given number of decimal places.
-fixed :: (B.Buildable a, RealFloat a) =>
+fixed :: (Real a) =>
          Int
       -- ^ Number of digits of precision after the decimal.
       -> a -> Builder
-fixed decs = B.build . FPControl Fixed (Just decs)
-
--- ^ Render a floating point number using normal notation.
-fixed_ :: (B.Buildable a, RealFloat a) => a -> Builder
-fixed_ = B.build . FPControl Fixed Nothing
+fixed decs = B.build . C.toFixed decs . realToFrac
+{-# RULES "fixed/Double"
+    forall d x. fixed d (x::Double) = B.build (C.toFixed d x) #-}
 
 -- ^ Render a floating point number using scientific/engineering
 -- notation (e.g. @2.3e123@), with the given number of decimal places.
-expt :: (B.Buildable a, RealFloat a) =>
+expt :: (Real a) =>
         Int
      -- ^ Number of digits of precision after the decimal.
      -> a -> Builder
-expt decs = B.build . FPControl Exponent (Just decs)
-
--- ^ Render a floating point number using scientific/engineering
--- notation (e.g. @2.3e123@).
-expt_ :: (B.Buildable a, RealFloat a) => a -> Builder
-expt_ = B.build . FPControl Exponent Nothing
+expt decs = B.build . C.toExponential decs . realToFrac
+{-# RULES "expt/Double"
+    forall d x. expt d (x::Double) = B.build (C.toExponential d x) #-}
 
 -- ^ Render an integer using hexadecimal notation.  (No leading "0x"
 -- is added.)

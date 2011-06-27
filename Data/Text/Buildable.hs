@@ -20,10 +20,7 @@ import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Ratio (Ratio, denominator, numerator)
 import Data.Text.Format.Functions ((<>))
 import Data.Text.Format.Int (decimal, hexadecimal)
-import Data.Text.Format.RealFloat (formatRealFloat, showFloat)
-import Data.Text.Format.RealFloat.Fast (DispFloat, formatFloat, fshowFloat)
-import Data.Text.Format.Types (Fast(..), Hex(..), Shown(..))
-import Data.Text.Format.Types.Internal (FPControl(..))
+import Data.Text.Format.Types (Hex(..), Shown(..))
 import Data.Text.Lazy.Builder
 import Data.Time.Calendar (Day, showGregorian)
 import Data.Time.Clock (DiffTime, NominalDiffTime, UTCTime, UniversalTime)
@@ -31,6 +28,7 @@ import Data.Time.Clock (getModJulianDate)
 import Data.Time.LocalTime (LocalTime, TimeOfDay, TimeZone, ZonedTime)
 import Data.Word (Word, Word8, Word16, Word32, Word64)
 import Foreign.Ptr (IntPtr, WordPtr, Ptr, ptrToWordPtr)
+import qualified Data.Double.Conversion as C
 import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
 
@@ -110,23 +108,11 @@ instance (Integral a, Buildable a) => Buildable (Ratio a) where
     build a = build (numerator a) <> singleton '/' <> build (denominator a)
 
 instance Buildable Float where
-    build = showFloat
+    build = fromText . C.toShortest . realToFrac
     {-# INLINE build #-}
 
 instance Buildable Double where
-    build = showFloat
-    {-# INLINE build #-}
-
-instance (RealFloat a) => Buildable (FPControl a) where
-    build (FPControl fmt decs x) = formatRealFloat fmt decs x
-    {-# INLINE build #-}
-
-instance (RealFloat a, DispFloat a) => Buildable (Fast a) where
-    build = fshowFloat . fromFast
-    {-# INLINE build #-}
-
-instance (RealFloat a, DispFloat a) => Buildable (Fast (FPControl a)) where
-    build (Fast (FPControl fmt decs x)) = formatFloat fmt decs x
+    build = fromText . C.toShortest
     {-# INLINE build #-}
 
 instance Buildable DiffTime where
