@@ -3,6 +3,7 @@
 --module Main (main) where
 
 import Control.Monad
+import Data.Char
 import Data.Bits
 import System.Environment
 import Data.Text.Format as T
@@ -41,28 +42,32 @@ p6 count = counting count $ \i x -> do
   L.putStr . encodeUtf8 $ t
 
 arg :: Int -> Text
-arg i = T.replicate (i.&.4) "fnord"
+arg i = "fnord" `T.append` (T.take (i `mod` 6) "foobar")
 {-# NOINLINE arg #-}
 
 one count = counting count $ \i x -> do
-  let t = T.format "hi mom {}\n" (Only (arg i))
+  let k = arg i
+  let t = {-# SCC "one/format" #-} T.format "hi mom {}\n" (Only k)
   L.putStr . encodeUtf8 $ t
 
 two count = counting count $ \i x -> do
-  let t = T.format "hi mom {} {}\n" (arg i,arg (i+1))
+  let k = arg i
+  let t = {-# SCC "two/format" #-} T.format "hi mom {} {}\n" (k,k)
   L.putStr . encodeUtf8 $ t
 
 three count = counting count $ \i x -> do
-  let t = T.format "hi mom {} {} {}\n" (arg i,arg (i+1),arg (i+2))
+  let k = arg i
+  let t = {-# SCC "three/format" #-} T.format "hi mom {} {} {}\n" (k,k,k)
   L.putStr . encodeUtf8 $ t
 
 four count = counting count $ \i x -> do
-  let t = T.format "hi mom {} {} {} {}\n" (arg i,arg (i+1),arg (i+2),arg (i+3))
+  let k = arg i
+  let t = {-# SCC "four/format" #-} T.format "hi mom {} {} {} {}\n" (k,k,k,k)
   L.putStr . encodeUtf8 $ t
 
 five count = counting count $ \i x -> do
-  let t = T.format "hi mom {} {} {} {} {}\n"
-          (arg i,arg (i+1),arg (i+2),arg (i+3),arg (i+4))
+  let k = arg i
+  let t = {-# SCC "five/format" #-} T.format "hi mom {} {} {} {} {}\n" (k,k,k,k,k)
   L.putStr . encodeUtf8 $ t
 
 dpi :: Double
