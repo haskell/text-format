@@ -26,8 +26,10 @@ main = defaultMain [
        , bgroup "comparison" [
            bench "format1" $ nf (format "hi mom {}\n") (Only (pi::Double))
          , bench "printf1" $ nf (printf1 "hi mom %f\n") (pi::Double)
+         , bench "show1" $ nf (\d -> "hi mom " ++ show d ++ "\n") (pi::Double)
          , bench "format2" $ nf (format "hi mom {} {}\n") (pi::Double, "yeah"::T.Text)
          , bench "printf2" $ nf (printf2 "hi mom %f %s\n") (pi::Double, "yeah"::String)
+         , bench "show2" $ nf (\(d,s) -> "hi mom " ++ show d ++ " " ++ show s ++ "\n") (pi::Double, "yeah"::String)
          ]
        , bgroup "types" [
            bench "unit" $ nf (format "hi") ()
