@@ -108,11 +108,11 @@ instance (Integral a, Buildable a) => Buildable (Ratio a) where
     build a = build (numerator a) <> singleton '/' <> build (denominator a)
 
 instance Buildable Float where
-    build = fromText . C.toShortest . realToFrac
+    build = fromText . C.toPrecision 6 . realToFrac
     {-# INLINE build #-}
 
 instance Buildable Double where
-    build = fromText . C.toShortest
+    build = fromText . C.toPrecision 6
     {-# INLINE build #-}
 
 instance Buildable DiffTime where
