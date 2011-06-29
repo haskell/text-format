@@ -42,7 +42,7 @@ import Data.Text.Format.Types.Internal (Hex(..))
 import Data.Text.Lazy.Builder
 import Prelude hiding (exp, print)
 import System.IO (Handle)
-import qualified Data.Double.Conversion as C
+import qualified Data.Double.Conversion.Text as C
 import qualified Data.Text as ST
 import qualified Data.Text.Buildable as B
 import qualified Data.Text.Lazy as LT

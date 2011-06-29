@@ -1,5 +1,5 @@
 name:           text-format
-version:        0.3.0.1
+version:        0.3.0.2
 license:        BSD3
 license-file:   LICENSE
 homepage:       https://github.com/mailrank/text-format
@@ -13,7 +13,7 @@ synopsis:       Text formatting
 cabal-version:  >= 1.8
 build-type:     Simple
 description:
-    A text formatting library optimized for ease of use and high
+    A text formatting library optimized for both ease of use and high
     performance.
 
 extra-source-files:
@@ -41,7 +41,7 @@ library
   build-depends:
     array,
     base == 4.*,
-    double-conversion,
+    double-conversion >= 0.2.0.0,
     ghc-prim,
     integer-gmp,
     old-locale,

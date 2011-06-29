@@ -28,7 +28,7 @@ import Data.Time.Clock (getModJulianDate)
 import Data.Time.LocalTime (LocalTime, TimeOfDay, TimeZone, ZonedTime)
 import Data.Word (Word, Word8, Word16, Word32, Word64)
 import Foreign.Ptr (IntPtr, WordPtr, Ptr, ptrToWordPtr)
-import qualified Data.Double.Conversion as C
+import qualified Data.Double.Conversion.Text as C
 import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
 
