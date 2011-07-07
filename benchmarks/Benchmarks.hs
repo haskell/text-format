@@ -36,6 +36,7 @@ main = defaultMain [
          , bench "show2" $ nf (\(d,s) -> "hi mom " ++ show d ++ " " ++ show s ++ "\n") (pi::Double, "yeah"::String)
          , bench "format3" $ nf (format "hi mom {} {} {}\n") (pi::Double, "yeah"::T.Text, 21212121::Int)
          , bench "printf3" $ nf (printf3 "hi mom %f %s %d\n") (pi::Double, "yeah"::String, 21212121::Int)
+         , bench "show3" $ nf (\(d,s,i) -> "hi mom " ++ show d ++ " " ++ show s ++ "\n") (pi::Double, "yeah"::String, 21212121::Int)
          ]
        , bgroup "types" [
            bench "unit" $ nf (format "hi") ()
