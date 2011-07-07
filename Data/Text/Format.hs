@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, RelaxedPolyRec #-}
 
 -- |
 -- Module      : Data.Text.Format
@@ -59,16 +59,16 @@ import qualified Data.Text.Lazy.IO as LT
 
 -- | Render a format string and arguments to a 'Builder'.
 build :: Params ps => Format -> ps -> Builder
-build fmt ps = zipParams fmt (crack fmt) (buildParams ps)
+build fmt ps = zipParams (crack fmt) (buildParams ps)
 {-# INLINE build #-}
 
-zipParams :: Format -> [Builder] -> [Builder] -> Builder
-zipParams fmt xs = go xs
+zipParams :: [Builder] -> [Builder] -> Builder
+zipParams fragments params = go fragments params
   where go (f:fs) (y:ys) = f <> y <> go fs ys
         go [f] []        = f
         go _ _ = error . LT.unpack $ format
                  "Data.Text.Format.build: {} sites, but {} parameters"
-                 (ST.count "{}" (fromFormat fmt), length xs)
+                 (length fragments - 1, length params)
 
 crack :: Format -> [Builder]
 crack = map fromText . ST.splitOn "{}" . fromFormat
