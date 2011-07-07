@@ -12,6 +12,10 @@ printf1 f a = P.printf f a
 printf2 :: (P.PrintfArg a, P.PrintfArg b) => String -> (a,b) -> String
 printf2 f (a,b) = P.printf f a b
 
+printf3 :: (P.PrintfArg a, P.PrintfArg b, P.PrintfArg c) =>
+           String -> (a,b,c) -> String
+printf3 f (a,b,c) = P.printf f a b c
+
 main = defaultMain [
          bgroup "arity" [
            bench "0" $ nf (format "hi") ()
@@ -30,6 +34,8 @@ main = defaultMain [
          , bench "format2" $ nf (format "hi mom {} {}\n") (pi::Double, "yeah"::T.Text)
          , bench "printf2" $ nf (printf2 "hi mom %f %s\n") (pi::Double, "yeah"::String)
          , bench "show2" $ nf (\(d,s) -> "hi mom " ++ show d ++ " " ++ show s ++ "\n") (pi::Double, "yeah"::String)
+         , bench "format3" $ nf (format "hi mom {} {} {}\n") (pi::Double, "yeah"::T.Text, 21212121::Int)
+         , bench "printf3" $ nf (printf3 "hi mom %f %s %d\n") (pi::Double, "yeah"::String, 21212121::Int)
          ]
        , bgroup "types" [
            bench "unit" $ nf (format "hi") ()
