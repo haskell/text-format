@@ -32,6 +32,7 @@ module Data.Text.Format
     , expt
     , fixed
     , prec
+    , shortest
     ) where
 
 import Control.Monad.IO.Class (MonadIO(liftIO))
@@ -131,6 +132,13 @@ expt :: (Real a) =>
 expt decs = B.build . C.toExponential decs . realToFrac
 {-# RULES "expt/Double"
     forall d x. expt d (x::Double) = B.build (C.toExponential d x) #-}
+
+-- | Render a floating point number using the smallest number of
+-- digits that correctly represent it.
+shortest :: (Real a) => a -> Builder
+shortest = B.build . C.toShortest . realToFrac
+{-# RULES "shortest/Double"
+    forall x. shortest (x::Double) = B.build (C.toShortest x) #-}
 
 -- | Render an integer using hexadecimal notation.  (No leading "0x"
 -- is added.)
