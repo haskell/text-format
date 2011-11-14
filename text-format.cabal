@@ -2,11 +2,11 @@ name:           text-format
 version:        0.3.0.5
 license:        BSD3
 license-file:   LICENSE
-homepage:       https://github.com/mailrank/text-format
-bug-reports:    https://github.com/mailrank/text-format/issues
+homepage:       https://github.com/bos/text-format
+bug-reports:    https://github.com/bos/text-format/issues
 category:       Text
-author:         Bryan O'Sullivan <bos@mailrank.com>
-maintainer:     Bryan O'Sullivan <bos@mailrank.com>
+author:         Bryan O'Sullivan <bos@serpentine.com>
+maintainer:     Bryan O'Sullivan <bos@serpentine.com>
 stability:      experimental
 tested-with:    GHC == 7.0.3
 synopsis:       Text formatting
@@ -64,7 +64,7 @@ library
 
 source-repository head
   type:     git
-  location: https://github.com/mailrank/text-format
+  location: https://github.com/bos/text-format
 
 source-repository head
   type:     mercurial
