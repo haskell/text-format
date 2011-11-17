@@ -5,7 +5,7 @@
 -- Copyright   : (c) 2011 MailRank, Inc.
 --
 -- License     : BSD-style
--- Maintainer  : bos@mailrank.com
+-- Maintainer  : bos@serpentine.com
 -- Stability   : experimental
 -- Portability : GHC
 --
