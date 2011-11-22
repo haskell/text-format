@@ -1,11 +1,11 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, RelaxedPolyRec #-}
 
 -- |
 -- Module      : Data.Text.Format
 -- Copyright   : (c) 2011 MailRank, Inc.
 --
 -- License     : BSD-style
--- Maintainer  : bos@mailrank.com
+-- Maintainer  : bos@serpentine.com
 -- Stability   : experimental
 -- Portability : GHC
 --
@@ -32,6 +32,7 @@ module Data.Text.Format
     , expt
     , fixed
     , prec
+    , shortest
     ) where
 
 import Control.Monad.IO.Class (MonadIO(liftIO))
@@ -59,16 +60,16 @@ import qualified Data.Text.Lazy.IO as LT
 
 -- | Render a format string and arguments to a 'Builder'.
 build :: Params ps => Format -> ps -> Builder
-build fmt ps = zipParams fmt (crack fmt) (buildParams ps)
+build fmt ps = zipParams (crack fmt) (buildParams ps)
 {-# INLINE build #-}
 
-zipParams :: Format -> [Builder] -> [Builder] -> Builder
-zipParams fmt xs = go xs
+zipParams :: [Builder] -> [Builder] -> Builder
+zipParams fragments params = go fragments params
   where go (f:fs) (y:ys) = f <> y <> go fs ys
         go [f] []        = f
         go _ _ = error . LT.unpack $ format
                  "Data.Text.Format.build: {} sites, but {} parameters"
-                 (ST.count "{}" (fromFormat fmt), length xs)
+                 (length fragments - 1, length params)
 
 crack :: Format -> [Builder]
 crack = map fromText . ST.splitOn "{}" . fromFormat
@@ -101,7 +102,7 @@ right :: B.Buildable a => Int -> Char -> a -> Builder
 right k c =
     fromLazyText . LT.justifyLeft (fromIntegral k) c . toLazyText . B.build
 
--- ^ Render a floating point number, with the given number of digits
+-- | Render a floating point number, with the given number of digits
 -- of precision.  Uses decimal notation for values between @0.1@ and
 -- @9,999,999@, and scientific notation otherwise.
 prec :: (Real a) =>
@@ -112,7 +113,7 @@ prec :: (Real a) =>
     forall d x. prec d (x::Double) = B.build (C.toPrecision d x) #-}
 prec digits = B.build . C.toPrecision digits . realToFrac
 
--- ^ Render a floating point number using normal notation, with the
+-- | Render a floating point number using normal notation, with the
 -- given number of decimal places.
 fixed :: (Real a) =>
          Int
@@ -122,7 +123,7 @@ fixed decs = B.build . C.toFixed decs . realToFrac
 {-# RULES "fixed/Double"
     forall d x. fixed d (x::Double) = B.build (C.toFixed d x) #-}
 
--- ^ Render a floating point number using scientific/engineering
+-- | Render a floating point number using scientific/engineering
 -- notation (e.g. @2.3e123@), with the given number of decimal places.
 expt :: (Real a) =>
         Int
@@ -132,7 +133,14 @@ expt decs = B.build . C.toExponential decs . realToFrac
 {-# RULES "expt/Double"
     forall d x. expt d (x::Double) = B.build (C.toExponential d x) #-}
 
--- ^ Render an integer using hexadecimal notation.  (No leading "0x"
+-- | Render a floating point number using the smallest number of
+-- digits that correctly represent it.
+shortest :: (Real a) => a -> Builder
+shortest = B.build . C.toShortest . realToFrac
+{-# RULES "shortest/Double"
+    forall x. shortest (x::Double) = B.build (C.toShortest x) #-}
+
+-- | Render an integer using hexadecimal notation.  (No leading "0x"
 -- is added.)
 hex :: Integral a => a -> Builder
 hex = B.build . Hex

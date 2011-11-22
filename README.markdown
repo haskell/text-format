@@ -9,11 +9,11 @@ We are happy to receive bug reports, fixes, documentation enhancements,
 and other improvements.
 
 Please report bugs via the
-[github issue tracker](https://github.com/mailrank/text-format/issues).
+[github issue tracker](https://github.com/bos/text-format/issues).
 
-Master [git repository](https://github.com/mailrank/text-format):
+Master [git repository](https://github.com/bos/text-format):
 
-* `git clone git://github.com/mailrank/text-format.git`
+* `git clone git://github.com/bos/text-format.git`
 
 There's also a [Mercurial mirror](https://bitbucket.org/bos/text-format):
 
@@ -25,4 +25,4 @@ Authors
 -------
 
 This library is written and maintained by Bryan O'Sullivan,
-<bos@mailrank.com>.
+<bos@serpentine.com>.

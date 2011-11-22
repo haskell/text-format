@@ -33,6 +33,10 @@ int count = counting count $ \i x -> do
   let t = T.format "hi mom {}\n" (Only i)
   L.putStr . encodeUtf8 $ t
 
+bigint count = counting count $ \i x -> do
+  let t = T.format "hi mom {}\n" (Only (i+100000))
+  L.putStr . encodeUtf8 $ t
+
 double count = counting count $ \i x -> do
   let t = T.format "hi mom {}\n" (Only (fromIntegral i * dpi))
   L.putStr . encodeUtf8 $ t
@@ -85,6 +89,7 @@ main = do
              ("double":_) -> double
              ("p6":_) -> p6
              ("int":_)    -> int
+             ("bigint":_) -> bigint
              ("one":_)    -> one
              ("two":_)    -> two
              ("three":_)  -> three
