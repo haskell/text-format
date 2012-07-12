@@ -8,7 +8,7 @@ category:       Text
 author:         Bryan O'Sullivan <bos@serpentine.com>
 maintainer:     Bryan O'Sullivan <bos@serpentine.com>
 stability:      experimental
-tested-with:    GHC == 7.0.3
+tested-with:    GHC == 7.0.3, GHC == 7.4.1
 synopsis:       Text formatting
 cabal-version:  >= 1.8
 build-type:     Simple
@@ -41,6 +41,7 @@ library
   build-depends:
     array,
     base == 4.*,
+    bytestring >= 0.9,
     double-conversion >= 0.2.0.0,
     ghc-prim,
     old-locale,
