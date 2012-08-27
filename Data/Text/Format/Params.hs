@@ -82,3 +82,104 @@ instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
     buildParams (a,b,c,d,e,f,g,h,i,j) =
         [build a, build b, build c, build d, build e,
          build f, build g, build h, build i, build j]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k)
+    => Params (a,b,c,d,e,f,g,h,i,j,k) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l, Buildable m)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l,m) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l,m) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l, build m]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l, Buildable m, Buildable n)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l,m,n) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l,m,n) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l, build m, build n]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l, Buildable m, Buildable n, Buildable o)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l, build m, build n, build o]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l, Buildable m, Buildable n, Buildable o,
+          Buildable p)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l, build m, build n, build o,
+         build p]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l, Buildable m, Buildable n, Buildable o,
+          Buildable p, Buildable r)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l, build m, build n, build o,
+         build p, build r]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l, Buildable m, Buildable n, Buildable o,
+          Buildable p, Buildable r, Buildable s)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l, build m, build n, build o,
+         build p, build r, build s]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l, Buildable m, Buildable n, Buildable o,
+          Buildable p, Buildable r, Buildable s, Buildable t)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l, build m, build n, build o,
+         build p, build r, build s, build t]
+
+instance (Buildable a, Buildable b, Buildable c, Buildable d, Buildable e,
+          Buildable f, Buildable g, Buildable h, Buildable i, Buildable j,
+          Buildable k, Buildable l, Buildable m, Buildable n, Buildable o,
+          Buildable p, Buildable r, Buildable s, Buildable t, Buildable u)
+    => Params (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u) where
+    buildParams (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u) =
+        [build a, build b, build c, build d, build e,
+         build f, build g, build h, build i, build j,
+         build k, build l, build m, build n, build o,
+         build p, build r, build s, build t, build u]
+
