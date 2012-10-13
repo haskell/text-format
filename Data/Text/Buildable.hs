@@ -169,3 +169,7 @@ instance Buildable WordPtr where
 
 instance Buildable (Ptr a) where
     build = build . ptrToWordPtr
+
+instance Buildable Bool where
+    build True = fromText "True"
+    build False = fromText "False"
