@@ -16,6 +16,7 @@ module Data.Text.Buildable
       Buildable(..)
     ) where
 
+import Data.Monoid (mempty)
 import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Ratio (Ratio, denominator, numerator)
 import Data.Text.Format.Functions ((<>))
@@ -139,6 +140,11 @@ instance (Show a) => Buildable (Shown a) where
     build = fromString . show . shown
     {-# INLINE build #-}
 
+instance (Buildable a) => Buildable (Maybe a) where
+    build Nothing = mempty
+    build (Just v) = build v
+    {-# INLINE build #-}
+
 instance Buildable TimeOfDay where
     build = build . Shown
     {-# INLINE build #-}
@@ -163,3 +169,7 @@ instance Buildable WordPtr where
 
 instance Buildable (Ptr a) where
     build = build . ptrToWordPtr
+
+instance Buildable Bool where
+    build True = fromText "True"
+    build False = fromText "False"
