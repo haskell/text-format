@@ -1,5 +1,5 @@
 name:           text-format
-version:        0.3.0.8
+version:        0.3.0.9
 license:        BSD3
 license-file:   LICENSE
 homepage:       https://github.com/bos/text-format
@@ -32,11 +32,11 @@ library
     Data.Text.Buildable
     Data.Text.Format.Params
     Data.Text.Format.Types
+    Data.Text.Format.Types.Internal
 
   other-modules:
     Data.Text.Format.Functions
     Data.Text.Format.Int
-    Data.Text.Format.Types.Internal
 
   build-depends:
     array,
