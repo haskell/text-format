@@ -57,6 +57,7 @@ decimal i
   where
     go n | n < 10    = digit n
          | otherwise = go (n `quot` 10) <> digit (n `rem` 10)
+{-# NOINLINE[0] decimal #-}
 
 hexadecimal :: Integral a => a -> Builder
 {-# SPECIALIZE hexadecimal :: Int -> Builder #-}
@@ -76,6 +77,7 @@ hexadecimal i
   where
     go n | n < 16    = hexDigit n
          | otherwise = go (n `quot` 16) <> hexDigit (n `rem` 16)
+{-# NOINLINE[0] hexadecimal #-}
 
 digit :: Integral a => a -> Builder
 digit n = singleton $! i2d (fromIntegral n)

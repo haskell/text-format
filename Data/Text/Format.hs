@@ -112,6 +112,7 @@ prec :: (Real a) =>
 {-# RULES "prec/Double"
     forall d x. prec d (x::Double) = B.build (C.toPrecision d x) #-}
 prec digits = B.build . C.toPrecision digits . realToFrac
+{-# NOINLINE[0] prec #-}
 
 -- | Render a floating point number using normal notation, with the
 -- given number of decimal places.
@@ -122,6 +123,7 @@ fixed :: (Real a) =>
 fixed decs = B.build . C.toFixed decs . realToFrac
 {-# RULES "fixed/Double"
     forall d x. fixed d (x::Double) = B.build (C.toFixed d x) #-}
+{-# NOINLINE[0] fixed #-}
 
 -- | Render a floating point number using scientific/engineering
 -- notation (e.g. @2.3e123@), with the given number of decimal places.
@@ -132,6 +134,7 @@ expt :: (Real a) =>
 expt decs = B.build . C.toExponential decs . realToFrac
 {-# RULES "expt/Double"
     forall d x. expt d (x::Double) = B.build (C.toExponential d x) #-}
+{-# NOINLINE[0] expt #-}
 
 -- | Render a floating point number using the smallest number of
 -- digits that correctly represent it.
@@ -139,6 +142,7 @@ shortest :: (Real a) => a -> Builder
 shortest = B.build . C.toShortest . realToFrac
 {-# RULES "shortest/Double"
     forall x. shortest (x::Double) = B.build (C.toShortest x) #-}
+{-# NOINLINE[0] shortest #-}
 
 -- | Render an integer using hexadecimal notation.  (No leading "0x"
 -- is added.)
