@@ -1,0 +1,29 @@
+sudo: false
+
+env:
+ - CABALVER=1.18 GHCVER=7.8.4
+ - CABALVER=1.22 GHCVER=7.10.1
+
+before_install:
+ - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
+ - travis_retry cabal update
+
+install:
+ - cabal --version
+ - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+ - cabal install --only-dependencies --enable-tests
+
+script:
+ - cabal configure --enable-tests -v2
+ - cabal build
+ - cabal test
+
+addons:
+  apt:
+    sources:
+    - hvr-ghc
+    packages:
+    - ghc-7.8.4
+    - ghc-7.10.1
+    - cabal-install-1.18
+    - cabal-install-1.22
