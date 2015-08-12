@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE CPP, FlexibleInstances, OverloadedStrings #-}
 
 -- |
 -- Module      : Data.Text.Buildable
@@ -15,6 +15,10 @@ module Data.Text.Buildable
     (
       Buildable(..)
     ) where
+
+#if MIN_VERSION_base(4,8,0)
+import Data.Void (Void, absurd)
+#endif
 
 import Data.Monoid (mempty)
 import Data.Int (Int8, Int16, Int32, Int64)
@@ -39,6 +43,11 @@ class Buildable p where
 
 instance Buildable Builder where
     build = id
+
+#if MIN_VERSION_base(4,8,0)
+instance Buildable Void where
+    build = absurd
+#endif
 
 instance Buildable LT.Text where
     build = fromLazyText
