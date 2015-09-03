@@ -33,11 +33,11 @@ library
     Data.Text.Buildable
     Data.Text.Format.Params
     Data.Text.Format.Types
+    Data.Text.Format.Types.Internal
 
   other-modules:
     Data.Text.Format.Functions
     Data.Text.Format.Int
-    Data.Text.Format.Types.Internal
 
   build-depends:
     array,
