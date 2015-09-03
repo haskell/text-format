@@ -22,6 +22,7 @@ import Data.Void (Void, absurd)
 
 import Data.Monoid (mempty)
 import Data.Int (Int8, Int16, Int32, Int64)
+import Data.Fixed (Fixed, HasResolution, showFixed)
 import Data.Ratio (Ratio, denominator, numerator)
 import Data.Text.Format.Functions ((<>))
 import Data.Text.Format.Int (decimal, hexadecimal)
@@ -91,6 +92,10 @@ instance Buildable Int64 where
 
 instance Buildable Integer where
     build = decimal
+    {-# INLINE build #-}
+
+instance (HasResolution a) => Buildable (Fixed a) where
+    build = build . showFixed False
     {-# INLINE build #-}
 
 instance Buildable Word8 where
