@@ -37,6 +37,10 @@ import Foreign.Ptr (IntPtr, WordPtr, Ptr, ptrToWordPtr)
 import qualified Data.Double.Conversion.Text as C
 import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
+import qualified Data.Text.Encoding as DTE
+import qualified Data.Text.Lazy.Encoding as DTLE
+import qualified Data.ByteString.Char8      as BS
+import qualified Data.ByteString.Lazy.Char8 as BSL
 
 -- | The class of types that can be rendered to a 'Builder'.
 class Buildable p where
@@ -56,6 +60,14 @@ instance Buildable LT.Text where
 
 instance Buildable ST.Text where
     build = fromText
+    {-# INLINE build #-}
+
+instance Buildable BS.ByteString where
+    build = fromText . DTE.decodeUtf8
+    {-# INLINE build #-}
+
+instance Buildable BSL.ByteString where
+    build = fromLazyText . DTLE.decodeUtf8
     {-# INLINE build #-}
 
 instance Buildable Char where
