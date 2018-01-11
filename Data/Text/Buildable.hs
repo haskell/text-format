@@ -37,6 +37,9 @@ import Foreign.Ptr (IntPtr, WordPtr, Ptr, ptrToWordPtr)
 import qualified Data.Double.Conversion.Text as C
 import qualified Data.Text as ST
 import qualified Data.Text.Lazy as LT
+#if MIN_VERSION_base(4,11,0)
+import Prelude hiding ((<>))
+#endif
 
 -- | The class of types that can be rendered to a 'Builder'.
 class Buildable p where
