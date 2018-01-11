@@ -13,7 +13,7 @@
 
 module Data.Text.Format.Functions
     (
-      (<>)
+      (Data.Text.Format.Functions.<>)
     , i2d
     ) where
 
