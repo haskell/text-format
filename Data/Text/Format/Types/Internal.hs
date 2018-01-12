@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable, GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE CPP, DeriveDataTypeable, GeneralizedNewtypeDeriving #-}
 
 -- |
 -- Module      : Data.Text.Format.Types.Internal
@@ -47,8 +47,13 @@ newtype Format = Format { fromFormat :: Text }
     deriving (Eq, Ord, Typeable, Show)
 
 instance Monoid Format where
-    Format a `mappend` Format b = Format (a `mappend` b)
     mempty = Format mempty
+#if !MIN_VERSION_base(4,11,0)
+    Format a `mappend` Format b = Format (a `mappend` b)
+#else
+instance Semigroup Format where
+    Format a <> Format b = Format (a <> b)
+#endif
 
 instance IsString Format where
     fromString = Format . fromString

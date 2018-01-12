@@ -24,6 +24,9 @@ import Data.Word (Word, Word8, Word16, Word32, Word64)
 import GHC.Base (quotInt, remInt)
 import GHC.Num (quotRemInteger)
 import GHC.Types (Int(..))
+#if MIN_VERSION_base(4,11,0)
+import Prelude hiding ((<>))
+#endif
 
 #ifdef  __GLASGOW_HASKELL__
 # if __GLASGOW_HASKELL__ < 611
