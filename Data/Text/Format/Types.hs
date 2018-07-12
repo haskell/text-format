@@ -1,4 +1,5 @@
-{-# LANGUAGE DeriveDataTypeable, GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DeriveDataTypeable         #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 -- |
 -- Module      : Data.Text.Format.Types
@@ -20,4 +21,4 @@ module Data.Text.Format.Types
     , Hex(..)
     ) where
 
-import Data.Text.Format.Types.Internal
+import           Data.Text.Format.Types.Internal
