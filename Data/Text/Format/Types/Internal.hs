@@ -21,10 +21,11 @@ module Data.Text.Format.Types.Internal
     , Hex(..)
     ) where
 
-import           Data.Monoid   (Monoid (..))
-import           Data.String   (IsString (..))
-import           Data.Text     (Text)
-import           Data.Typeable (Typeable)
+import           Data.Monoid    (Monoid (..))
+import           Data.Semigroup (Semigroup (..))
+import           Data.String    (IsString (..))
+import           Data.Text      (Text)
+import           Data.Typeable  (Typeable)
 
 -- | A format string. This is intentionally incompatible with other
 -- string types, to make it difficult to construct a format string by
