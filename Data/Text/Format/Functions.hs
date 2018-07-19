@@ -13,7 +13,7 @@
 
 module Data.Text.Format.Functions
     (
-      (<>)
+      (Data.Text.Format.Functions.<>)
     , i2d
     ) where
 
@@ -30,6 +30,7 @@ i2d (I# i#) = C# (chr# (ord# '0'# +# i#))
 -- left.
 (<>) :: Builder -> Builder -> Builder
 (<>) = mappend
+{-# DEPRECATED (<>) "Use <> from Data.Semigroup" #-}
 {-# INLINE (<>) #-}
 
 infixr 4 <>

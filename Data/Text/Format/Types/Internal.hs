@@ -20,6 +20,7 @@ module Data.Text.Format.Types.Internal
     , Hex(..)
     ) where
 
+import Data.Semigroup (Semigroup (..))
 import Data.Monoid (Monoid(..))
 import Data.String (IsString(..))
 import Data.Text (Text)
@@ -46,9 +47,12 @@ import Data.Typeable (Typeable)
 newtype Format = Format { fromFormat :: Text }
     deriving (Eq, Ord, Typeable, Show)
 
+instance Semigroup Format where
+    Format a <> Format b = Format (a `mappend` b)
+
 instance Monoid Format where
-    Format a `mappend` Format b = Format (a `mappend` b)
     mempty = Format mempty
+    mappend = (<>)
 
 instance IsString Format where
     fromString = Format . fromString

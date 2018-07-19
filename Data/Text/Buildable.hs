@@ -20,11 +20,11 @@ module Data.Text.Buildable
 import Data.Void (Void, absurd)
 #endif
 
+import Data.Semigroup ((<>))
 import Data.Monoid (mempty)
 import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Fixed (Fixed, HasResolution, showFixed)
 import Data.Ratio (Ratio, denominator, numerator)
-import Data.Text.Format.Functions ((<>))
 import Data.Text.Format.Int (decimal, hexadecimal)
 import Data.Text.Format.Types (Hex(..), Shown(..))
 import Data.Text.Lazy.Builder

@@ -1,5 +1,5 @@
 name:           text-format
-version:        0.3.1.1
+version:        0.3.2
 license:        BSD3
 license-file:   LICENSE
 homepage:       https://github.com/bos/text-format
@@ -8,13 +8,24 @@ category:       Text
 author:         Bryan O'Sullivan <bos@serpentine.com>
 maintainer:     Bryan O'Sullivan <bos@serpentine.com>
 stability:      experimental
-tested-with:    GHC == 7.0.3
 synopsis:       Text formatting
 cabal-version:  >= 1.8
 build-type:     Simple
 description:
     A text formatting library optimized for both ease of use and high
     performance.
+
+tested-with:
+  GHC == 7.0.4
+   || == 7.2.2
+   || == 7.4.2
+   || == 7.6.3
+   || == 7.8.4
+   || == 7.10.3
+   || == 8.0.2
+   || == 8.2.2
+   || == 8.4.3
+   || == 8.6.1
 
 extra-source-files:
     README.markdown
@@ -41,7 +52,8 @@ library
 
   build-depends:
     array,
-    base == 4.*,
+    base >=4.3 && <4.12,
+    integer-gmp >= 0.2,
     double-conversion >= 0.2.0.0,
     ghc-prim,
     old-locale,
@@ -57,11 +69,9 @@ library
 
   cpp-options: -DINTEGER_GMP
 
-  if impl(ghc >= 6.11)
-    build-depends: integer-gmp >= 0.2
-
-  if impl(ghc >= 6.9) && impl(ghc < 6.11)
-    build-depends: integer >= 0.1 && < 0.2
+  if !impl(ghc >= 8.0)
+    build-depends:
+      semigroups          >= 0.18.5  && < 0.19
 
 source-repository head
   type:     git

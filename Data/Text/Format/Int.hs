@@ -18,7 +18,8 @@ module Data.Text.Format.Int
 
 import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Monoid (mempty)
-import Data.Text.Format.Functions ((<>), i2d)
+import Data.Semigroup ((<>))
+import Data.Text.Format.Functions (i2d)
 import Data.Text.Lazy.Builder
 import Data.Word (Word, Word8, Word16, Word32, Word64)
 import GHC.Base (quotInt, remInt)
