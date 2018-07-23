@@ -29,6 +29,7 @@ tested-with:
 
 extra-source-files:
     README.markdown
+    CHANGELOG.md
     benchmarks/Makefile
     benchmarks/*.c
     benchmarks/*.hs
