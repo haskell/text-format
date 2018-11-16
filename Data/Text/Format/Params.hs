@@ -14,9 +14,9 @@ module Data.Text.Format.Params
       Params(..)
     ) where
 
-import Data.Text.Buildable
-import Data.Text.Format.Types
-import Data.Text.Lazy.Builder
+import           Data.Text.Buildable
+import           Data.Text.Format.Types
+import           Data.Text.Lazy.Builder
 
 -- | The class of types that can be used as a collection of arguments
 -- for formatting.

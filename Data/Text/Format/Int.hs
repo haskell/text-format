@@ -1,4 +1,7 @@
-{-# LANGUAGE BangPatterns, CPP, MagicHash, UnboxedTuples #-}
+{-# LANGUAGE BangPatterns  #-}
+{-# LANGUAGE CPP           #-}
+{-# LANGUAGE MagicHash     #-}
+{-# LANGUAGE UnboxedTuples #-}
 
 -- Module:      Data.Text.Format.Int
 -- Copyright:   (c) 2011 MailRank, Inc.
@@ -16,20 +19,22 @@ module Data.Text.Format.Int
     , minus
     ) where
 
-import Data.Int (Int8, Int16, Int32, Int64)
-import Data.Monoid (mempty)
-import Data.Text.Format.Functions ((<>), i2d)
-import Data.Text.Lazy.Builder
-import Data.Word (Word, Word8, Word16, Word32, Word64)
-import GHC.Base (quotInt, remInt)
-import GHC.Num (quotRemInteger)
-import GHC.Types (Int(..))
+import           Data.Int                   (Int16, Int32, Int64, Int8)
+import           Data.Monoid                (mempty)
+import           Data.Text.Format.Functions (i2d, (<>))
+import           Data.Text.Lazy.Builder
+import           Data.Word                  (Word, Word16, Word32, Word64,
+                                             Word8)
+import           GHC.Base                   (quotInt, remInt)
+import           GHC.Num                    (quotRemInteger)
+import           GHC.Types                  (Int (..))
+import           Prelude                    hiding ((<>))
 
 #ifdef  __GLASGOW_HASKELL__
 # if __GLASGOW_HASKELL__ < 611
-import GHC.Integer.Internals
+import           GHC.Integer.Internals
 # else
-import GHC.Integer.GMP.Internals
+import           GHC.Integer.GMP.Internals
 # endif
 #endif
 

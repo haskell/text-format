@@ -1,4 +1,5 @@
-{-# LANGUAGE OverloadedStrings, RelaxedPolyRec #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RelaxedPolyRec    #-}
 
 -- |
 -- Module      : Data.Text.Format
@@ -35,19 +36,20 @@ module Data.Text.Format
     , shortest
     ) where
 
-import Control.Monad.IO.Class (MonadIO(liftIO))
-import Data.Text.Format.Functions ((<>))
-import Data.Text.Format.Params (Params(..))
-import Data.Text.Format.Types.Internal (Format(..), Only(..), Shown(..))
-import Data.Text.Format.Types.Internal (Hex(..))
-import Data.Text.Lazy.Builder
-import Prelude hiding (exp, print)
-import System.IO (Handle)
-import qualified Data.Double.Conversion.Text as C
-import qualified Data.Text as ST
-import qualified Data.Text.Buildable as B
-import qualified Data.Text.Lazy as LT
-import qualified Data.Text.Lazy.IO as LT
+import           Control.Monad.IO.Class          (MonadIO (liftIO))
+import qualified Data.Double.Conversion.Text     as C
+import qualified Data.Text                       as ST
+import qualified Data.Text.Buildable             as B
+import           Data.Text.Format.Functions      ((<>))
+import           Data.Text.Format.Params         (Params (..))
+import           Data.Text.Format.Types.Internal (Format (..), Only (..),
+                                                  Shown (..))
+import           Data.Text.Format.Types.Internal (Hex (..))
+import qualified Data.Text.Lazy                  as LT
+import           Data.Text.Lazy.Builder
+import qualified Data.Text.Lazy.IO               as LT
+import           Prelude                         hiding (exp, print, (<>))
+import           System.IO                       (Handle)
 
 -- Format strings are almost always constants, and they're expensive
 -- to interpret (which we refer to as "cracking" here).  We'd really

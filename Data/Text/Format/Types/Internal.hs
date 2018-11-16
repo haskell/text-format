@@ -1,4 +1,5 @@
-{-# LANGUAGE DeriveDataTypeable, GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DeriveDataTypeable         #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 -- |
 -- Module      : Data.Text.Format.Types.Internal
@@ -20,10 +21,11 @@ module Data.Text.Format.Types.Internal
     , Hex(..)
     ) where
 
-import Data.Monoid (Monoid(..))
-import Data.String (IsString(..))
-import Data.Text (Text)
-import Data.Typeable (Typeable)
+import           Data.Monoid    (Monoid (..))
+import           Data.Semigroup (Semigroup (..))
+import           Data.String    (IsString (..))
+import           Data.Text      (Text)
+import           Data.Typeable  (Typeable)
 
 -- | A format string. This is intentionally incompatible with other
 -- string types, to make it difficult to construct a format string by
@@ -46,8 +48,10 @@ import Data.Typeable (Typeable)
 newtype Format = Format { fromFormat :: Text }
     deriving (Eq, Ord, Typeable, Show)
 
+instance Semigroup Format where
+    Format a <> Format b = Format (a <> b)
+
 instance Monoid Format where
-    Format a `mappend` Format b = Format (a `mappend` b)
     mempty = Format mempty
 
 instance IsString Format where

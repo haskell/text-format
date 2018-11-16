@@ -17,9 +17,10 @@ module Data.Text.Format.Functions
     , i2d
     ) where
 
-import Data.Monoid (mappend)
-import Data.Text.Lazy.Builder (Builder)
-import GHC.Base
+import           Data.Monoid            (mappend)
+import           Data.Text.Lazy.Builder (Builder)
+import           GHC.Base               hiding ((<>))
+import           Prelude                hiding ((<>))
 
 -- | Unsafe conversion for decimal digits.
 {-# INLINE i2d #-}
