@@ -18,7 +18,7 @@ module Data.Text.Format.Int
 
 import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Monoid (mempty)
-import Data.Text.Format.Functions ((<>), i2d)
+import Data.Text.Format.Functions ((<~>), i2d)
 import Data.Text.Lazy.Builder
 import Data.Word (Word, Word8, Word16, Word32, Word64)
 import GHC.Base (quotInt, remInt)
@@ -52,11 +52,11 @@ decimal :: Integral a => a -> Builder
 {-# SPECIALIZE decimal :: Word64 -> Builder #-}
 {-# RULES "decimal/Integer" decimal = integer 10 :: Integer -> Builder #-}
 decimal i
-    | i < 0     = minus <> go (-i)
+    | i < 0     = minus <~> go (-i)
     | otherwise = go i
   where
     go n | n < 10    = digit n
-         | otherwise = go (n `quot` 10) <> digit (n `rem` 10)
+         | otherwise = go (n `quot` 10) <~> digit (n `rem` 10)
 {-# NOINLINE[0] decimal #-}
 
 hexadecimal :: Integral a => a -> Builder
@@ -72,11 +72,11 @@ hexadecimal :: Integral a => a -> Builder
 {-# SPECIALIZE hexadecimal :: Word64 -> Builder #-}
 {-# RULES "hexadecimal/Integer" hexadecimal = integer 16 :: Integer -> Builder #-}
 hexadecimal i
-    | i < 0     = minus <> go (-i)
+    | i < 0     = minus <~> go (-i)
     | otherwise = go i
   where
     go n | n < 16    = hexDigit n
-         | otherwise = go (n `quot` 16) <> hexDigit (n `rem` 16)
+         | otherwise = go (n `quot` 16) <~> hexDigit (n `rem` 16)
 {-# NOINLINE[0] hexadecimal #-}
 
 digit :: Integral a => a -> Builder
@@ -102,7 +102,7 @@ integer :: Int -> Integer -> Builder
 integer 10 (S# i#) = decimal (I# i#)
 integer 16 (S# i#) = hexadecimal (I# i#)
 integer base i
-    | i < 0     = minus <> go (-i)
+    | i < 0     = minus <~> go (-i)
     | otherwise = go i
   where
     go n | n < maxInt = int (fromInteger n)
@@ -137,14 +137,14 @@ integer base i
 
     putH (n:ns) = case n `quotRemInteger` maxInt of
                     PAIR(x,y)
-                        | q > 0     -> int q <> pblock r <> putB ns
-                        | otherwise -> int r <> putB ns
+                        | q > 0     -> int q <~> pblock r <~> putB ns
+                        | otherwise -> int r <~> putB ns
                         where q = fromInteger x
                               r = fromInteger y
     putH _ = error "putH: the impossible happened"
 
     putB (n:ns) = case n `quotRemInteger` maxInt of
-                    PAIR(x,y) -> pblock q <> pblock r <> putB ns
+                    PAIR(x,y) -> pblock q <~> pblock r <~> putB ns
                         where q = fromInteger x
                               r = fromInteger y
     putB _ = mempty
@@ -153,6 +153,6 @@ integer base i
       where
         loop !d !n
             | d == 1    = digit n
-            | otherwise = loop (d-1) q <> digit r
+            | otherwise = loop (d-1) q <~> digit r
             where q = n `quotInt` base
                   r = n `remInt` base

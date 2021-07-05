@@ -24,7 +24,7 @@ import Data.Monoid (mempty)
 import Data.Int (Int8, Int16, Int32, Int64)
 import Data.Fixed (Fixed, HasResolution, showFixed)
 import Data.Ratio (Ratio, denominator, numerator)
-import Data.Text.Format.Functions ((<>))
+import Data.Text.Format.Functions ((<~>))
 import Data.Text.Format.Int (decimal, hexadecimal)
 import Data.Text.Format.Types (Hex(..), Shown(..))
 import Data.Text.Lazy.Builder
@@ -120,7 +120,7 @@ instance Buildable Word64 where
 
 instance (Integral a, Buildable a) => Buildable (Ratio a) where
     {-# SPECIALIZE instance Buildable (Ratio Integer) #-}
-    build a = build (numerator a) <> singleton '/' <> build (denominator a)
+    build a = build (numerator a) <~> singleton '/' <~> build (denominator a)
 
 instance Buildable Float where
     build = fromText . C.toPrecision 6 . realToFrac
@@ -176,10 +176,10 @@ instance Buildable ZonedTime where
     {-# INLINE build #-}
 
 instance Buildable IntPtr where
-    build p = fromText "0x" <> hexadecimal p
+    build p = fromText "0x" <~> hexadecimal p
 
 instance Buildable WordPtr where
-    build p = fromText "0x" <> hexadecimal p
+    build p = fromText "0x" <~> hexadecimal p
 
 instance Buildable (Ptr a) where
     build = build . ptrToWordPtr

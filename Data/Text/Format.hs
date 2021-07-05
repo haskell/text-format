@@ -36,7 +36,7 @@ module Data.Text.Format
     ) where
 
 import Control.Monad.IO.Class (MonadIO(liftIO))
-import Data.Text.Format.Functions ((<>))
+import Data.Text.Format.Functions ((<~>))
 import Data.Text.Format.Params (Params(..))
 import Data.Text.Format.Types.Internal (Format(..), Only(..), Shown(..))
 import Data.Text.Format.Types.Internal (Hex(..))
@@ -65,7 +65,7 @@ build fmt ps = zipParams (crack fmt) (buildParams ps)
 
 zipParams :: [Builder] -> [Builder] -> Builder
 zipParams fragments params = go fragments params
-  where go (f:fs) (y:ys) = f <> y <> go fs ys
+  where go (f:fs) (y:ys) = f <~> y <~> go fs ys
         go [f] []        = f
         go _ _ = error . LT.unpack $ format
                  "Data.Text.Format.build: {} sites, but {} parameters"

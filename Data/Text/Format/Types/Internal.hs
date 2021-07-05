@@ -46,6 +46,9 @@ import Data.Typeable (Typeable)
 newtype Format = Format { fromFormat :: Text }
     deriving (Eq, Ord, Typeable, Show)
 
+instance Semigroup Format where
+    Format a <> Format b = Format (a <> b)
+
 instance Monoid Format where
     Format a `mappend` Format b = Format (a `mappend` b)
     mempty = Format mempty

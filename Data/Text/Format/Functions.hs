@@ -13,7 +13,7 @@
 
 module Data.Text.Format.Functions
     (
-      (<>)
+      (<~>)
     , i2d
     ) where
 
@@ -28,8 +28,8 @@ i2d (I# i#) = C# (chr# (ord# '0'# +# i#))
 
 -- | The normal 'mappend' function with right associativity instead of
 -- left.
-(<>) :: Builder -> Builder -> Builder
-(<>) = mappend
-{-# INLINE (<>) #-}
+(<~>) :: Builder -> Builder -> Builder
+(<~>) = mappend
+{-# INLINE (<~>) #-}
 
-infixr 4 <>
+infixr 4 <~>
