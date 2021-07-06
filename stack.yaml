@@ -4,4 +4,18 @@ flags:
 packages:
 - '.'
 extra-deps: []
-resolver: lts-12.14 # 11.22 # 9.21 # 7.24 # 6.35  # 3.22 # 3.0
+#resolver: nightly-2021-07-04
+#resolver: lts-17.2
+#resolver: lts-16.31 #(skipped because of GHC panic)
+#resolver: lts-16.11
+#reslover: lts-15.3
+#resolver: lts-14.27
+#resolver: lts-13.19
+#resolver: lts-13.11
+#resolver: lts-12.26
+#resolver: lts-12.14
+resolver: lts-11.22
+#resolver: lts-9.21
+#resolver: lts-7.24
+#resolver: lts-6.35
+#resolver: lts-3.22

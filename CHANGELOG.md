@@ -9,7 +9,8 @@
     the previously internal (<>) that had a funkey right assoc to (<~>),
     and added a Semigroup instance.
   * Added the exitsing benchmark to the 'text-format.cabal' file to ease
-    testing.
+    testing.  Use: 'stack bench text-format:bench-text-format' to run.
   * Added CHANGELOG.md to record changes.
-
+  * Updated for GHC 9.0 Big Integer changes, changed 'quotRemInteger' to
+    'integerQuotRem#' and 'S#' to 'IS'.
 

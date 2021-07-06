@@ -22,15 +22,24 @@ import Data.Text.Format.Functions ((<~>), i2d)
 import Data.Text.Lazy.Builder
 import Data.Word (Word, Word8, Word16, Word32, Word64)
 import GHC.Base (quotInt, remInt)
-import GHC.Num (quotRemInteger)
 import GHC.Types (Int(..))
 
+
 #ifdef  __GLASGOW_HASKELL__
-# if __GLASGOW_HASKELL__ < 611
+#if __GLASGOW_HASKELL__ < 900
+import GHC.Num (quotRemInteger)
+#else
+import GHC.Num (integerQuotRem#, Integer( IS ))
+#endif
+
+#if __GLASGOW_HASKELL__ < 611
 import GHC.Integer.Internals
-# else
+#endif
+#if __GLASGOW_HASKELL__ < 900
 import GHC.Integer.GMP.Internals
-# endif
+#else
+
+#endif
 #endif
 
 #ifdef INTEGER_GMP
@@ -99,8 +108,13 @@ int = decimal
 data T = T !Integer !Int
 
 integer :: Int -> Integer -> Builder
+#if __GLASGOW_HASKELL__ < 900
 integer 10 (S# i#) = decimal (I# i#)
 integer 16 (S# i#) = hexadecimal (I# i#)
+#else
+integer 10 (IS i#) = decimal (I# i#)
+integer 16 (IS i#) = hexadecimal (I# i#)
+#endif
 integer base i
     | i < 0     = minus <~> go (-i)
     | otherwise = go i
@@ -112,12 +126,20 @@ integer base i
       | p > n       = [n]
       | otherwise   = splith p (splitf (p*p) n)
 
+#if __GLASGOW_HASKELL__ < 900
     splith p (n:ns) = case n `quotRemInteger` p of
+#else
+    splith p (n:ns) = case n `integerQuotRem#` p of
+#endif
                         PAIR(q,r) | q > 0     -> q : r : splitb p ns
                                   | otherwise -> r : splitb p ns
     splith _ _      = error "splith: the impossible happened."
 
+#if __GLASGOW_HASKELL__ < 900
     splitb p (n:ns) = case n `quotRemInteger` p of
+#else
+    splitb p (n:ns) = case n `integerQuotRem#` p of
+#endif
                         PAIR(q,r) -> q : r : splitb p ns
     splitb _ _      = []
 
@@ -135,7 +157,11 @@ integer base i
     maxDigits | base == 10 = maxDigits10
               | otherwise  = maxDigits16
 
+#if __GLASGOW_HASKELL__ < 900
     putH (n:ns) = case n `quotRemInteger` maxInt of
+#else
+    putH (n:ns) = case n `integerQuotRem#` maxInt of
+#endif
                     PAIR(x,y)
                         | q > 0     -> int q <~> pblock r <~> putB ns
                         | otherwise -> int r <~> putB ns
@@ -143,7 +169,11 @@ integer base i
                               r = fromInteger y
     putH _ = error "putH: the impossible happened"
 
+#if __GLASGOW_HASKELL__ < 900
     putB (n:ns) = case n `quotRemInteger` maxInt of
+#else
+    putB (n:ns) = case n `integerQuotRem#` maxInt of
+#endif
                     PAIR(x,y) -> pblock q <~> pblock r <~> putB ns
                         where q = fromInteger x
                               r = fromInteger y
