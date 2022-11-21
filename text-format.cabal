@@ -25,10 +25,12 @@ tested-with:
    || == 7.10.3
    || == 8.0.2
    || == 8.2.2
-   || == 8.4.3
+   || == 8.4.4
    || == 8.6.5
-   || == 8.8.3
-   || == 8.10.1
+   || == 8.8.4
+   || == 8.10.7
+   || == 9.0.2
+   || == 9.2.5
 
 extra-source-files:
     README.markdown
@@ -55,15 +57,15 @@ library
     Data.Text.Format.Int
 
   build-depends:
-    array,
-    base >=4.3 && <4.17,
-    integer-gmp >= 0.2,
-    double-conversion >= 0.2.0.0,
-    ghc-prim,
-    old-locale,
-    text >= 0.11.0.8,
-    time,
-    transformers
+      array
+    , base              >= 4.3       && < 4.17
+    , integer-gmp       >= 0.2
+    , double-conversion >= 0.2.0.0
+    , ghc-prim
+    , old-locale
+    , text              >= 0.11.0.8
+    , time
+    , transformers
 
   if flag(developer)
     ghc-options: -Werror
@@ -75,12 +77,8 @@ library
 
   if !impl(ghc >= 8.0)
     build-depends:
-      semigroups          >= 0.18.5  && < 0.20
+      semigroups        >= 0.18.5  && < 0.20
 
 source-repository head
   type:     git
   location: https://github.com/hackage-trustees/text-format.git
-
-source-repository head
-  type:     mercurial
-  location: https://bitbucket.org/bos/text-format
