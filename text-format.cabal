@@ -1,6 +1,7 @@
 cabal-version:  >= 1.10
 name:           text-format
 version:        0.3.2.1
+x-revision:     1
 license:        BSD3
 license-file:   LICENSE
 homepage:       https://github.com/hackage-trustees/text-format
@@ -30,6 +31,7 @@ tested-with:
    || == 8.10.7
    || == 9.0.2
    || == 9.2.5
+   || == 9.4.3
 
 extra-source-files:
     README.markdown
@@ -57,7 +59,7 @@ library
 
   build-depends:
       array
-    , base              >= 4.3       && < 4.17
+    , base              >= 4.3       && < 4.18
     , integer-gmp       >= 0.2
     , double-conversion >= 0.2.0.0
     , ghc-prim

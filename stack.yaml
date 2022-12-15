@@ -1,5 +1,8 @@
-resolver: lts-20.1
+resolver: nightly-2022-12-12
 
 flags:
   text-format:
     developer: false
+
+extra-deps:
+- double-conversion-2.0.4.2
